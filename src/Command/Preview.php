@@ -36,7 +36,7 @@ final class Preview implements Command
             $env->workingDirectory()->resolve($config->documentation()),
         );
 
-        $watch(function() use ($env): void {
+        $watch(static function() use ($env): void {
             $env->output()->write(Str::of("folder changed\n"));
         });
     }
