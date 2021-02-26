@@ -44,6 +44,7 @@ final class Preview implements Command
         $output = static function(string $out) use ($env): void {
             $env->output()->write(Str::of($out));
         };
+        ($this->generate)($config, $tmp);
 
         $watch(function() use ($output, $tmp, $config): void {
             $output('folder changed, regenerating...');
