@@ -51,11 +51,10 @@ final class Preview implements Command
                 ->withShortOption('S', 'localhost:2492')
                 ->withWorkingDirectory($tmp),
         );
-        $server = $this->os->control()->processes()->execute(
+        $this->os->control()->processes()->execute(
             Server\Command::foreground('open')
                 ->withArgument('http://localhost:2492'),
-        );
-        $server->wait();
+        )->wait();
         $output("Webserver available at: http://localhost:2492\n");
 
         $watch(function() use ($output, $tmp, $config): void {
@@ -63,11 +62,6 @@ final class Preview implements Command
             ($this->generate)($config, $tmp);
             $output(" ok\n");
         });
-
-        $this->os->control()->processes()->kill(
-            $server->pid(),
-            Server\Signal::terminate(),
-        );
     }
 
     public function toString(): string
