@@ -40,13 +40,16 @@ new class extends Main {
                 Map::of('string', 'object')
                     ('helper', new Templating\Helper($service('rewrite_url'))),
             ))
-            ->service('render_markdown', static fn($env, $os, $service) => new Render\Markdown(
-                $service('rewrite_url'),
-                $service('templating'),
+            ->service('render', static fn($env, $os, $service) => new Render\All(
+                new Render\Markdown(
+                    $service('rewrite_url'),
+                    $service('templating'),
+                ),
+                new Render\AddStaticFiles($os, Path::of(__DIR__.'/')),
             ))
             ->service('generate', static fn($env, $os, $service) => new Generate(
                 $os,
-                $service('render_markdown'),
+                $service('render'),
             ))
             ->service('preview', static fn($env, $os, $service) => new Preview(
                 $os,
