@@ -32,11 +32,13 @@ final class Markdown implements File
 
     public function content(): Readable
     {
-        return $this->markdown->content();
+        return Readable\Stream::ofContent(
+            (string) (new \Parsedown)->text($this->markdown->content()->toString()),
+        );
     }
 
     public function mediaType(): MediaType
     {
-        return $this->markdown->mediaType();
+        return new MediaType('text', 'html');
     }
 }
