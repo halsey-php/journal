@@ -33,6 +33,10 @@
         header {
             grid-area: header;
             border-bottom: 1px solid var(--border-color);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 22px;
         }
         header h2 {
             margin: 0;
@@ -78,9 +82,14 @@
             border-radius: var(--block-radius);
         }
 
-        p > code {
+        header code, p > code {
             background-color: var(--inline-background);
             padding: 4px 6px;
+            color: rgb(178, 183, 189);
+        }
+
+        header a {
+            text-decoration: none;
             color: rgb(178, 183, 189);
         }
 
@@ -101,7 +110,7 @@
 </head>
 <body>
     <header>
-        <h2>{{ vendor ~ '/' ~ package }}</h2>
+        <a href="{{ baseUrl }}"><code>{{ package }}</code></a>
     </header>
     <aside>
         <ul>
