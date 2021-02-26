@@ -16,7 +16,6 @@ final class Config
     private string $title = 'Documentation';
     /** @var list<Entry> */
     private array $menu = [];
-    private bool $alwaysOpen = false;
 
     public function __construct(Path $project)
     {
@@ -51,23 +50,6 @@ final class Config
         $self->documentation = $folder;
 
         return $self;
-    }
-
-    public function alwaysOpen(): self
-    {
-        $self = clone $this;
-        $self->alwaysOpen = true;
-
-        return $self;
-    }
-
-    public function openFor(RelativePath $markdown): bool
-    {
-        if ($this->alwaysOpen) {
-            return true;
-        }
-
-        return false;
     }
 
     public function documentation(): Path
