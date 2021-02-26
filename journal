@@ -19,23 +19,39 @@ use Halsey\Journal\{
     Generate,
     Render,
     RewriteUrl,
+    Templating,
 };
 use Innmind\CLI\Framework\{
     Main,
     Application,
 };
+use function Innmind\Templating\bootstrap;
+use Innmind\Url\Path;
+use Innmind\Immutable\Map;
 
 new class extends Main {
     protected function configure(Application $app): Application
     {
-        return $app->commands(static fn($env, $os) => [
-            new Preview(
+        return $app
+            ->service('rewrite_url', static fn() => new RewriteUrl)
+            ->service('templating', static fn($env, $os, $service) => bootstrap(
+                Path::of(__DIR__.'/templates/'),
+                null,
+                Map::of('string', 'object')
+                    ('helper', new Templating\Helper($service('rewrite_url'))),
+            ))
+            ->service('render_markdown', static fn($env, $os, $service) => new Render\Markdown(
+                $service('rewrite_url'),
+                $service('templating'),
+            ))
+            ->service('generate', static fn($env, $os, $service) => new Generate(
                 $os,
-                new Generate(
-                    $os,
-                    new Render\Markdown(new RewriteUrl),
-                ),
-            ),
-        ]);
+                $service('render_markdown'),
+            ))
+            ->service('preview', static fn($env, $os, $service) => new Preview(
+                $os,
+                $service('generate'),
+            ))
+            ->command('preview');
     }
 };

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style type="text/css">
+        :root {
+            --border-color: grey;
+            --padding: 10px;
+        }
+        body {
+            margin: 0;
+            display: grid;
+            grid-template-areas:
+                "header main"
+                "aside main";
+            grid-template-rows: 50px 1fr;
+            grid-template-columns: 20% 1fr;
+            height: 100vh;
+            font-family: "Helvetica";
+        }
+        header, aside > ul > li, main {
+            padding: var(--padding);
+        }
+        header {
+            grid-area: header;
+            border-bottom: 1px solid var(--border-color);
+        }
+        header h2 {
+            margin: 0;
+        }
+        aside {
+            grid-area: aside;
+        }
+        aside > ul {
+            margin: 0;
+            padding: 0;
+        }
+        aside > ul > li {
+            border-bottom: 1px solid var(--border-color);
+        }
+        aside > ul > li > a {
+            margin-left: 21px;
+        }
+        .sub-item {
+            padding-top: var(--padding);
+        }
+        main {
+            grid-area: main;
+            border-left: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>{{ title }}</h2>
+    </header>
+    <aside>
+        <ul>
+        {% for entry in menu %}
+            <li>
+                {% if entry.entries|length > 0 %}
+                    <details>
+                        <summary>
+                            <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                {{ entry.name }}
+                            </a>
+                        </summary>
+                        {% if entry.entries|length > 0 %}
+                            <ul>
+                                {% for subEntry in entry.entries %}
+                                    <li class="sub-item">
+                                        <a href="{{ subEntry.url.toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                            {{ subEntry.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </details>
+                {% else %}
+                    <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                        {{ entry.name }}
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </aside>
+    <main>{{ documentation|raw }}</main>
+</body>
+</html>

@@ -1,12 +1,36 @@
 <?php
 declare(strict_types = 1);
 
-use Halsey\Journal\Config;
-use Innmind\Url\Path;
+use Halsey\Journal\{
+    Config,
+    Menu\Entry,
+};
+use Innmind\Url\{
+    Url,
+    Path,
+};
 
 return static function(Config $config): Config
 {
     return $config
         ->title('Example')
-        ->locatedAt(Path::of('example/'));
+        ->locatedAt(Path::of('example/'))
+        ->menu(
+            Entry::externalLink(
+                'Some external link',
+                Url::of('https://github.com/halsey-php'),
+                Entry::externalLink(
+                    'Sub menu',
+                    Url::of('https://github.com/halsey-php'),
+                ),
+                Entry::externalLink(
+                    'Sub menu 2',
+                    Url::of('https://github.com/halsey-php'),
+                ),
+            ),
+            Entry::externalLink(
+                'Some external link 2',
+                Url::of('https://github.com/halsey-php'),
+            ),
+        );
 };

@@ -8,11 +8,13 @@ use Innmind\Url\{
     Path,
     RelativePath,
 };
+use Innmind\Immutable\Map;
 
 final class Config
 {
     private Path $project;
     private RelativePath $documentation;
+    private Template $template;
     private string $title = 'Documentation';
     /** @var list<Entry> */
     private array $menu = [];
@@ -22,6 +24,7 @@ final class Config
         $this->project = $project;
         /** @var RelativePath */
         $this->documentation = Path::of('documentation/');
+        $this->template = Template::raw();
     }
 
     public function title(string $title): self
@@ -55,5 +58,23 @@ final class Config
     public function documentation(): Path
     {
         return $this->project->resolve($this->documentation);
+    }
+
+    public function template(): Template
+    {
+        return $this->template;
+    }
+
+    /**
+     * @return Map<string, mixed>
+     */
+    public function forTemplating(): Map
+    {
+        /** @var Map<string, mixed> */
+        $parameters = Map::of('string', 'mixed');
+
+        return ($parameters)
+            ('title', $this->title)
+            ('menu', $this->menu);
     }
 }

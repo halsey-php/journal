@@ -13,34 +13,39 @@ use Innmind\Filesystem\{
     Directory,
     File,
 };
+use Innmind\Templating\Engine;
 use Innmind\Immutable\Str;
 
 final class Markdown implements Render
 {
     private RewriteUrl $rewrite;
+    private Engine $templating;
 
-    public function __construct(RewriteUrl $rewrite)
+    public function __construct(RewriteUrl $rewrite, Engine $templating)
     {
         $this->rewrite = $rewrite;
+        $this->templating = $templating;
     }
 
     public function __invoke(Config $config, Directory $documentation): Directory
     {
-        return $this->map($documentation);
+        return $this->map($config, $documentation);
     }
 
-    private function map(Directory $directory): Directory
+    private function map(Config $config, Directory $directory): Directory
     {
         return $directory->reduce(
             new Directory\Directory($directory->name()),
-            function(Directory $directory, File $file): Directory {
+            function(Directory $directory, File $file) use ($config): Directory {
                 if ($file instanceof Directory) {
-                    return $directory->add($this->map($file));
+                    return $directory->add($this->map($config, $file));
                 }
 
                 if (Str::of($file->name()->toString())->matches('~\.md$~')) {
                     return $directory->add(new MarkdownFile(
                         $this->rewrite,
+                        $this->templating,
+                        $config,
                         $file,
                     ));
                 }
