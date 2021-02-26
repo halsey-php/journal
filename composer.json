@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "halsey\\journal\\": "src/"
+            "Halsey\\Journal\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\halsey\\journal\\": "tests/"
+            "Tests\\Halsey\\Journal\\": "tests/"
         }
     },
     "require-dev": {
