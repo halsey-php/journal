@@ -55,17 +55,25 @@ final class Config
         return $self;
     }
 
+    /**
+     * @internal
+     */
     public function documentation(): Path
     {
         return $this->project->resolve($this->documentation);
     }
 
+    /**
+     * @internal
+     */
     public function template(): Template
     {
         return $this->template;
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, mixed>
      */
     public function forTemplating(): Map
