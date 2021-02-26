@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ title }}</title>
+    <title>{{ vendor ~ '/' ~ package }}</title>
     <style type="text/css">
         :root {
             --border-color: grey;
@@ -87,14 +87,14 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/atom-one-dark-reasonable.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="{{ baseUrl }}static/styles/default.css">
+    <link rel="stylesheet" href="{{ baseUrl }}static/styles/atom-one-dark.css">
+    <script src="{{ baseUrl }}static/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
     <header>
-        <h2>{{ title }}</h2>
+        <h2>{{ vendor ~ '/' ~ package }}</h2>
     </header>
     <aside>
         <ul>

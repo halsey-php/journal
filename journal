@@ -44,6 +44,7 @@ new class extends Main {
                 new Render\Markdown(
                     $service('rewrite_url'),
                     $service('templating'),
+                    $env->arguments()->contains('preview'),
                 ),
                 new Render\AddStaticFiles($os, Path::of(__DIR__.'/')),
             ))

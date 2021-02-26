@@ -15,7 +15,6 @@ use Innmind\Templating\Engine;
 use Innmind\Url\Url;
 use Innmind\MediaType\MediaType;
 use Innmind\Stream\Readable;
-use Innmind\Immutable\Map;
 
 final class Markdown implements File
 {
@@ -23,17 +22,20 @@ final class Markdown implements File
     private Engine $render;
     private Config $config;
     private File $markdown;
+    private bool $preview;
 
     public function __construct(
         RewriteUrl $rewrite,
         Engine $templating,
         Config $config,
-        File $markdown
+        File $markdown,
+        bool $preview
     ) {
         $this->rewrite = $rewrite;
         $this->render = $templating;
         $this->config = $config;
         $this->markdown = $markdown;
+        $this->preview = $preview;
     }
 
     public function name(): Name
@@ -45,18 +47,20 @@ final class Markdown implements File
 
     public function content(): Readable
     {
-        /** @var Map<string, mixed> */
-        $parameters = Map::of('string', 'mixed');
+        $parameters = ($this->config->forTemplating())(
+            'documentation',
+            (string) (new \Parsedown)->text(
+                $this->markdown->content()->toString(),
+            ),
+        );
+
+        if ($this->preview) {
+            $parameters = ($parameters)('baseUrl', 'http://localhost:2492/');
+        }
 
         return ($this->render)(
             $this->config->template()->entrypoint(),
-            ($this->config->forTemplating())
-                (
-                    'documentation',
-                    (string) (new \Parsedown)->text(
-                        $this->markdown->content()->toString(),
-                    ),
-                ),
+            $parameters,
         );
     }
 

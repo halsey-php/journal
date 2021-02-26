@@ -13,7 +13,7 @@ use Innmind\Url\{
 return static function(Config $config): Config
 {
     return $config
-        ->title('Example')
+        ->package('halsey', 'journal', 'halsey-php')
         ->locatedAt(Path::of('example/'))
         ->menu(
             Entry::externalLink(

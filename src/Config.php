@@ -5,6 +5,7 @@ namespace Halsey\Journal;
 
 use Halsey\Journal\Menu\Entry;
 use Innmind\Url\{
+    Url,
     Path,
     RelativePath,
 };
@@ -15,7 +16,9 @@ final class Config
     private Path $project;
     private RelativePath $documentation;
     private Template $template;
-    private string $title = 'Documentation';
+    private string $organization = '';
+    private string $vendor = '';
+    private string $package = '';
     /** @var list<Entry> */
     private array $menu = [];
 
@@ -27,10 +30,12 @@ final class Config
         $this->template = Template::raw();
     }
 
-    public function title(string $title): self
+    public function package(string $vendor, string $package, string $organization = null): self
     {
         $self = clone $this;
-        $self->title = $title;
+        $self->organization = $organization ?? $vendor;
+        $self->vendor = $vendor;
+        $self->package = $package;
 
         return $self;
     }
@@ -82,7 +87,11 @@ final class Config
         $parameters = Map::of('string', 'mixed');
 
         return ($parameters)
-            ('title', $this->title)
+            ('organization', $this->organization)
+            ('vendor', $this->vendor)
+            ('package', $this->package)
+            ('baseUrl', "https://{$this->organization}.github.io/{$this->package}/")
+            ('repository', "https://github.com/{$this->organization}/{$this->package}/")
             ('menu', $this->menu);
     }
 }
