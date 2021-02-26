@@ -19,8 +19,9 @@
             display: grid;
             grid-template-areas:
                 "header main"
-                "aside main";
-            grid-template-rows: 50px 1fr;
+                "aside main"
+                "footer main";
+            grid-template-rows: 50px 1fr 5%;
             grid-template-columns: 20% 1fr;
             min-height: 100vh;
             font-family: "Helvetica";
@@ -56,6 +57,13 @@
         }
         aside a {
             text-decoration: none;
+        }
+        footer {
+            grid-area: footer;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .sub-item {
             padding-top: var(--padding);
@@ -149,5 +157,8 @@
         </ul>
     </aside>
     <main>{{ documentation|raw }}</main>
+    <footer>
+        <a href="{{ repository }}" target="_blank">GitHub</a>
+    </footer>
 </body>
 </html>
