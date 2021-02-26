@@ -14,6 +14,7 @@ use Innmind\CLI\{
     Environment,
 };
 use Innmind\OperatingSystem\OperatingSystem;
+use Innmind\Server\Control\Server;
 use Innmind\Url\Path;
 use Innmind\Immutable\Str;
 
@@ -45,12 +46,28 @@ final class Preview implements Command
             $env->output()->write(Str::of($out));
         };
         ($this->generate)($config, $tmp);
+        $this->os->control()->processes()->execute(
+            Server\Command::background('php')
+                ->withShortOption('S', 'localhost:2492')
+                ->withWorkingDirectory($tmp),
+        );
+        $server = $this->os->control()->processes()->execute(
+            Server\Command::foreground('open')
+                ->withArgument('http://localhost:2492'),
+        );
+        $server->wait();
+        $output("Webserver available at: http://localhost:2492\n");
 
         $watch(function() use ($output, $tmp, $config): void {
             $output('folder changed, regenerating...');
             ($this->generate)($config, $tmp);
             $output(" ok\n");
         });
+
+        $this->os->control()->processes()->kill(
+            $server->pid(),
+            Server\Signal::terminate(),
+        );
     }
 
     public function toString(): string
