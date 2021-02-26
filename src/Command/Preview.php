@@ -51,21 +51,27 @@ final class Preview implements Command
                 ->withShortOption('S', 'localhost:2492')
                 ->withWorkingDirectory($tmp),
         );
-        $this->os->control()->processes()->execute(
-            Server\Command::foreground('open')
-                ->withArgument('http://localhost:2492'),
-        )->wait();
+        $this->openBrowser();
         $output("Webserver available at: http://localhost:2492\n");
 
         $watch(function() use ($output, $tmp, $config): void {
             $output('folder changed, regenerating...');
             ($this->generate)($config, $tmp);
             $output(" ok\n");
+            $this->openBrowser();
         });
     }
 
     public function toString(): string
     {
         return 'preview';
+    }
+
+    private function openBrowser(): void
+    {
+        $this->os->control()->processes()->execute(
+            Server\Command::foreground('open')
+                ->withArgument('http://localhost:2492'),
+        )->wait();
     }
 }
