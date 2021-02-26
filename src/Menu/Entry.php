@@ -37,6 +37,11 @@ final class Entry
         return new self($name, $url, true, ...$entries);
     }
 
+    public static function section(string $name, self $first, self ...$entries): self
+    {
+        return new self($name, Url::of('#'), false, $first, ...$entries);
+    }
+
     public function alwaysOpen(): self
     {
         $self = clone $this;
@@ -67,6 +72,11 @@ final class Entry
     public function pointsElsewhere(): bool
     {
         return $this->externalLink;
+    }
+
+    public function pointsSomewhere(): bool
+    {
+        return !$this->url->equals(Url::of('#'));
     }
 
     /**

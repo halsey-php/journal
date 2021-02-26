@@ -28,6 +28,13 @@ return static function(Config $config): Config
                     Url::of('https://github.com/halsey-php'),
                 ),
             ),
+            Entry::section(
+                'Some section',
+                Entry::externalLink(
+                    'Sub menu',
+                    Url::of('https://github.com/halsey-php'),
+                ),
+            ),
             Entry::externalLink(
                 'Some external link 2',
                 Url::of('https://github.com/halsey-php'),

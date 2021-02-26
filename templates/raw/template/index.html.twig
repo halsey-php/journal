@@ -87,9 +87,13 @@
                 {% if entry.entries|length > 0 %}
                     <details>
                         <summary>
-                            <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                            {% if entry.pointsSomewhere() %}
+                                <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                    {{ entry.name }}
+                                </a>
+                            {% else %}
                                 {{ entry.name }}
-                            </a>
+                            {% endif %}
                         </summary>
                         {% if entry.entries|length > 0 %}
                             <ul>
