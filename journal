@@ -17,6 +17,7 @@ foreach ($paths as $file) {
 use Halsey\Journal\{
     Command\Preview,
     Generate,
+    Render,
 };
 use Innmind\CLI\Framework\{
     Main,
@@ -29,7 +30,7 @@ new class extends Main {
         return $app->commands(static fn($env, $os) => [
             new Preview(
                 $os,
-                new Generate($os),
+                new Generate($os, new Render\Markdown),
             ),
         ]);
     }

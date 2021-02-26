@@ -14,10 +14,12 @@ use Innmind\Url\Path;
 final class Generate
 {
     private OperatingSystem $os;
+    private Render $render;
 
-    public function __construct(OperatingSystem $os)
+    public function __construct(OperatingSystem $os, Render $render)
     {
         $this->os = $os;
+        $this->render = $render;
     }
 
     public function __invoke(Config $config, Path $generateAt): Directory
@@ -29,7 +31,7 @@ final class Generate
             $this->os->filesystem()->mount($config->documentation())->all(),
         );
 
-        // TODO render the website files
+        $documentation = ($this->render)($config, $documentation);
 
         $documentation->foreach(static function(File $file) use ($tmp): void {
             $tmp->add($file);
