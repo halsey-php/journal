@@ -6,6 +6,10 @@
         :root {
             --border-color: grey;
             --padding: 10px;
+            --background-color: white;
+            --text-color: black;
+            --link: rgb(0, 0, 238);
+            --link-visited: rgb(85, 26, 139);
         }
         body {
             margin: 0;
@@ -17,6 +21,8 @@
             grid-template-columns: 20% 1fr;
             height: 100vh;
             font-family: "Helvetica";
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
         header, aside > ul > li, main {
             padding: var(--padding);
@@ -41,12 +47,32 @@
         aside > ul > li > a {
             margin-left: 21px;
         }
+        aside a {
+            text-decoration: none;
+        }
         .sub-item {
             padding-top: var(--padding);
         }
         main {
             grid-area: main;
             border-left: 1px solid var(--border-color);
+        }
+
+        a {
+            color: var(--link);
+        }
+        a:visited {
+            color: var(--link-visited);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --border-color: white;
+                --background-color: rgb(46, 61, 79);
+                --text-color: rgb(178, 183, 189);
+                --link: rgb(133, 95, 238);
+                --link-visited: rgb(117, 84, 148);
+            }
         }
     </style>
 </head>
