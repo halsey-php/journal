@@ -18,6 +18,7 @@ use Halsey\Journal\{
     Command\Preview,
     Generate,
     Render,
+    RewriteUrl,
 };
 use Innmind\CLI\Framework\{
     Main,
@@ -30,7 +31,10 @@ new class extends Main {
         return $app->commands(static fn($env, $os) => [
             new Preview(
                 $os,
-                new Generate($os, new Render\Markdown),
+                new Generate(
+                    $os,
+                    new Render\Markdown(new RewriteUrl),
+                ),
             ),
         ]);
     }

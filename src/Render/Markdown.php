@@ -7,6 +7,7 @@ use Halsey\Journal\{
     Render,
     Config,
     File\Markdown as MarkdownFile,
+    RewriteUrl,
 };
 use Innmind\Filesystem\{
     Directory,
@@ -16,9 +17,16 @@ use Innmind\Immutable\Str;
 
 final class Markdown implements Render
 {
+    private RewriteUrl $rewrite;
+
+    public function __construct(RewriteUrl $rewrite)
+    {
+        $this->rewrite = $rewrite;
+    }
+
     public function __invoke(Config $config, Directory $documentation): Directory
     {
-        return $documentation;
+        return $this->map($documentation);
     }
 
     private function map(Directory $directory): Directory
@@ -31,7 +39,10 @@ final class Markdown implements Render
                 }
 
                 if (Str::of($file->name()->toString())->matches('~\.md$~')) {
-                    return $directory->add(new MarkdownFile($file));
+                    return $directory->add(new MarkdownFile(
+                        $this->rewrite,
+                        $file,
+                    ));
                 }
 
                 return $directory->add($file);
