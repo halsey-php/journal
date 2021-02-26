@@ -1,0 +1,12 @@
+<?php
+declare(strict_types = 1);
+
+use Halsey\Journal\Config;
+use Innmind\Url\Path;
+
+return static function(Config $config): Config
+{
+    return $config
+        ->title('Example')
+        ->locatedAt(Path::of('example/'));
+};

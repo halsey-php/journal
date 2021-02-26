@@ -16,7 +16,8 @@
     },
     "require": {
         "php": "~7.4|~8.0",
-        "innmind/url": "^3.6"
+        "innmind/url": "^3.6",
+        "innmind/cli-framework": "^1.4"
     },
     "autoload": {
         "psr-4": {
@@ -33,5 +34,6 @@
         "vimeo/psalm": "~4.0",
         "innmind/black-box": "~4.10",
         "innmind/coding-standard": "~1.0"
-    }
+    },
+    "bin": ["journal"]
 }
