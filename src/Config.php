@@ -11,14 +11,16 @@ use Innmind\Url\{
 
 final class Config
 {
+    private Path $project;
     private RelativePath $documentation;
     private string $title = 'Documentation';
     /** @var list<Entry> */
     private array $menu = [];
     private bool $alwaysOpen = false;
 
-    public function __construct()
+    public function __construct(Path $project)
     {
+        $this->project = $project;
         /** @var RelativePath */
         $this->documentation = Path::of('documentation/');
     }
@@ -68,8 +70,8 @@ final class Config
         return false;
     }
 
-    public function documentation(): RelativePath
+    public function documentation(): Path
     {
-        return $this->documentation;
+        return $this->project->resolve($this->documentation);
     }
 }

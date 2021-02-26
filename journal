@@ -14,7 +14,10 @@ foreach ($paths as $file) {
     }
 }
 
-use Halsey\Journal\Command\Preview;
+use Halsey\Journal\{
+    Command\Preview,
+    Generate,
+};
 use Innmind\CLI\Framework\{
     Main,
     Application,
@@ -24,7 +27,10 @@ new class extends Main {
     protected function configure(Application $app): Application
     {
         return $app->commands(static fn($env, $os) => [
-            new Preview($os),
+            new Preview(
+                $os,
+                new Generate($os),
+            ),
         ]);
     }
 };
