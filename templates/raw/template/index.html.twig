@@ -12,6 +12,7 @@
             --link-visited: rgb(85, 26, 139);
             --quote-background: rgba(41, 44, 51, 0.31);
             --block-radius: 5px;
+            --inline-background: rgb(41, 44, 51);
         }
         body {
             margin: 0;
@@ -75,6 +76,12 @@
 
         blockquote, code {
             border-radius: var(--block-radius);
+        }
+
+        p > code {
+            background-color: var(--inline-background);
+            padding: 4px 6px;
+            color: rgb(178, 183, 189);
         }
 
         @media (prefers-color-scheme: dark) {
