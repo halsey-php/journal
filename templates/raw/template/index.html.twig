@@ -10,6 +10,7 @@
             --text-color: black;
             --link: rgb(0, 0, 238);
             --link-visited: rgb(85, 26, 139);
+            --quote-background: rgba(41, 44, 51, 0.31);
         }
         body {
             margin: 0;
@@ -19,7 +20,7 @@
                 "aside main";
             grid-template-rows: 50px 1fr;
             grid-template-columns: 20% 1fr;
-            height: 100vh;
+            min-height: 100vh;
             font-family: "Helvetica";
             background-color: var(--background-color);
             color: var(--text-color);
@@ -65,6 +66,12 @@
             color: var(--link-visited);
         }
 
+        blockquote {
+            background-color: var(--quote-background);
+            padding: 5px 40px;
+            margin: 0;
+        }
+
         @media (prefers-color-scheme: dark) {
             :root {
                 --border-color: white;
@@ -75,6 +82,10 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/atom-one-dark-reasonable.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
     <header>
