@@ -25,10 +25,10 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-
       - name: Install Dependencies
         run: composer install --no-progress
-      - name: Publish
-        run: ./journal publish
+      - name: Generate
+        run: ./journal generate
       - name: Push
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./.tmp_journal/

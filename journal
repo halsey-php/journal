@@ -15,8 +15,7 @@ foreach ($paths as $file) {
 }
 
 use Halsey\Journal\{
-    Command\Preview,
-    Command\Publish,
+    Command,
     Generate,
     Render,
     RewriteUrl,
@@ -60,16 +59,21 @@ new class extends Main {
                 $os,
                 $service('render'),
             ))
-            ->service('preview', static fn($env, $os, $service) => new Preview(
+            ->service('preview', static fn($env, $os, $service) => new Command\Preview(
                 $os,
                 $service('generate'),
             ))
-            ->service('publish', static fn($env, $os, $service) => new Publish(
+            ->service('generate_command', static fn($env, $os, $service) => new Command\Generate(
+                $os,
+                $service('generate'),
+            ))
+            ->service('publish', static fn($env, $os, $service) => new Command\Publish(
                 $os,
                 new Git($os->control(), $os->clock()),
                 $service('generate'),
             ))
             ->command('preview')
-            ->command('publish');
+            ->command('publish')
+            ->command('generate_command');
     }
 };

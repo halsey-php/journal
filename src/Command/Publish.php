@@ -67,13 +67,8 @@ final class Publish implements Command
             $this->os->filesystem()->mount($env->workingDirectory()),
             $website,
         );
-
-        // Pushing in a GitHub Action doesn't work like it would do locally
-        // we need to use an extra Action to push via http
-        if (!$env->variables()->contains('CI')) {
-            $this->push($repository);
-            $repository->checkout()->revision($head);
-        }
+        $this->push($repository);
+        $repository->checkout()->revision($head);
     }
 
     public function toString(): string
