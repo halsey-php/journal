@@ -16,6 +16,7 @@ foreach ($paths as $file) {
 
 use Halsey\Journal\{
     Command\Preview,
+    Command\Publish,
     Generate,
     Render,
     RewriteUrl,
@@ -25,6 +26,7 @@ use Innmind\CLI\Framework\{
     Main,
     Application,
 };
+use Innmind\Git\Git;
 use function Innmind\Templating\bootstrap as templating;
 use function Innmind\Html\bootstrap as html;
 use Innmind\Url\Path;
@@ -62,6 +64,12 @@ new class extends Main {
                 $os,
                 $service('generate'),
             ))
-            ->command('preview');
+            ->service('publish', static fn($env, $os, $service) => new Publish(
+                $os,
+                new Git($os->control(), $os->clock()),
+                $service('generate'),
+            ))
+            ->command('preview')
+            ->command('publish');
     }
 };
