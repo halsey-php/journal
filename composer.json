@@ -20,7 +20,8 @@
         "innmind/cli-framework": "^1.4",
         "erusev/parsedown": "^1.7",
         "erusev/parsedown-extra": "^0.8.1",
-        "innmind/templating": "^2.1"
+        "innmind/templating": "^2.1",
+        "innmind/html": "^5.1"
     },
     "autoload": {
         "psr-4": {

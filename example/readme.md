@@ -20,3 +20,5 @@ Lists
 ---
 
 > Some quote
+
+Link to [self](readme.md)

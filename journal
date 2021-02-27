@@ -25,7 +25,8 @@ use Innmind\CLI\Framework\{
     Main,
     Application,
 };
-use function Innmind\Templating\bootstrap;
+use function Innmind\Templating\bootstrap as templating;
+use function Innmind\Html\bootstrap as html;
 use Innmind\Url\Path;
 use Innmind\Immutable\Map;
 
@@ -34,7 +35,7 @@ new class extends Main {
     {
         return $app
             ->service('rewrite_url', static fn() => new RewriteUrl)
-            ->service('templating', static fn($env, $os, $service) => bootstrap(
+            ->service('templating', static fn($env, $os, $service) => templating(
                 Path::of(__DIR__.'/templates/'),
                 null,
                 Map::of('string', 'object')
@@ -45,6 +46,10 @@ new class extends Main {
                     $service('rewrite_url'),
                     $service('templating'),
                     $env->arguments()->contains('preview'),
+                ),
+                new Render\RewriteUrls(
+                    $service('rewrite_url'),
+                    html(),
                 ),
                 new Render\AddStaticFiles($os, Path::of(__DIR__.'/')),
             ))
