@@ -1,5 +1,6 @@
 :root {
     --border-color: grey;
+    --light-border-color: rgba(128, 128, 128, 0.4);
     --padding: 10px;
     --background-color: white;
     --text-color: black;
@@ -85,6 +86,10 @@ main {
     border-left: 1px solid var(--border-color);
     padding: var(--padding) 40px;
 }
+h1, h2, h3, h4, h5, h6 {
+    padding-bottom: var(--padding);
+    border-bottom: 1px solid var(--light-border-color);
+}
 h1 .anchor, h2 .anchor, h3 .anchor, h4 .anchor, h5 .anchor, h6 .anchor {
     float: left;
     margin-left: -20px;
@@ -135,6 +140,7 @@ header a {
 @media (prefers-color-scheme: dark) {
     :root {
         --border-color: white;
+        --light-border-color: rgba(255, 255, 255, 0.1);
         --background-color: rgb(46, 61, 79);
         --text-color: rgb(178, 183, 189);
         --link: rgb(133, 95, 238);
