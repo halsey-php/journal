@@ -101,6 +101,8 @@ final class Publish implements Command
         $files
             ->all()
             ->filter(static fn(File $file) => !$file->name()->equals(new Name('.git')))
+            ->filter(static fn(File $file) => !$file->name()->equals(new Name('vendor')))
+            ->filter(static fn(File $file) => !$file->name()->equals(new Name('.gitignore')))
             ->foreach(static fn(File $file) => $files->remove($file->name()));
 
         $website->foreach(static fn(File $file) => $files->add($file));
