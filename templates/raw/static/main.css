@@ -83,6 +83,25 @@ footer {
 main {
     grid-area: main;
     border-left: 1px solid var(--border-color);
+    padding: var(--padding) 40px;
+}
+h1 .anchor, h2 .anchor, h3 .anchor, h4 .anchor, h5 .anchor, h6 .anchor {
+    float: left;
+    margin-left: -20px;
+    visibility: hidden;
+    color: var(--text-color);
+    text-decoration: none;
+    display: inline-flex;
+    width: 20px;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, h4:hover .anchor, h5:hover .anchor, h6:hover .anchor {
+    visibility: visible;
+}
+.anchor:visited {
+    color: var(--text-color);
 }
 
 a {

@@ -47,7 +47,7 @@ new class extends Main {
                     $service('templating'),
                     $env->arguments()->contains('preview'),
                 ),
-                new Render\RewriteUrls(
+                new Render\RewriteHtml(
                     $service('rewrite_url'),
                     html(),
                 ),

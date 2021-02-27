@@ -16,7 +16,7 @@ use Innmind\Filesystem\{
 };
 use Innmind\Xml\Reader;
 
-final class RewriteUrls implements Render
+final class RewriteHtml implements Render
 {
     private RewriteUrl $rewrite;
     private Reader $reader;

@@ -35,9 +35,9 @@ return static function(Config $config): Config
                     Path::of('sub/readme.md'),
                 ),
             )->alwaysOpen(),
-            Entry::externalLink(
-                'Some external link 2',
-                Url::of('https://github.com/halsey-php'),
+            Entry::markdown(
+                'Headings',
+                Path::of('headings.md'),
             ),
         );
 };
