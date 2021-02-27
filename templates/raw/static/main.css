@@ -22,6 +22,7 @@ body {
     font-family: "Helvetica";
     background-color: var(--background-color);
     color: var(--text-color);
+    line-height: 25px;
 }
 header, aside > ul > li, main {
     padding: var(--padding);
