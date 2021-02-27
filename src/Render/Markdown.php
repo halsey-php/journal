@@ -14,6 +14,7 @@ use Innmind\Filesystem\{
     File,
 };
 use Innmind\Templating\Engine;
+use Innmind\Url\Path;
 use Innmind\Immutable\Str;
 
 final class Markdown implements Render
@@ -37,13 +38,22 @@ final class Markdown implements Render
         return $this->map($config, $documentation);
     }
 
-    private function map(Config $config, Directory $directory): Directory
-    {
+    private function map(
+        Config $config,
+        Directory $directory,
+        Path $parent = null
+    ): Directory {
         return $directory->reduce(
             new Directory\Directory($directory->name()),
-            function(Directory $directory, File $file) use ($config): Directory {
+            function(Directory $directory, File $file) use ($config, $parent): Directory {
                 if ($file instanceof Directory) {
-                    return $directory->add($this->map($config, $file));
+                    $name = Path::of($file->name()->toString().'/');
+
+                    return $directory->add($this->map(
+                        $config,
+                        $file,
+                        $parent ? $parent->resolve($name) : $name,
+                    ));
                 }
 
                 if (Str::of($file->name()->toString())->matches('~\.md$~')) {
@@ -52,7 +62,8 @@ final class Markdown implements Render
                         $this->templating,
                         $config,
                         $file,
-                        $this->preview
+                        $parent,
+                        $this->preview,
                     ));
                 }
 

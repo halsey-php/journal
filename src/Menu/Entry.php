@@ -5,7 +5,11 @@ namespace Halsey\Journal\Menu;
 
 use Innmind\Url\{
     Url,
-    RelativePath,
+    Path,
+    Scheme,
+    Authority,
+    Query,
+    Fragment,
 };
 
 final class Entry
@@ -42,6 +46,25 @@ final class Entry
         return new self($name, Url::of('#'), false, $first, ...$entries);
     }
 
+    public static function markdown(
+        string $name,
+        Path $markdown,
+        self ...$entries
+    ): self {
+        return new self(
+            $name,
+            new Url(
+                Scheme::none(),
+                Authority::none(),
+                $markdown,
+                Query::none(),
+                Fragment::none(),
+            ),
+            false,
+            ...$entries,
+        );
+    }
+
     public function alwaysOpen(): self
     {
         $self = clone $this;
@@ -50,13 +73,23 @@ final class Entry
         return $self;
     }
 
-    public function openFor(RelativePath $markdown): bool
+    public function openFor(Path $markdown): bool
     {
         if ($this->alwaysOpen) {
             return true;
         }
 
-        return false;
+        foreach ($this->entries as $entry) {
+            if ($entry->openFor($markdown)) {
+                return true;
+            }
+        }
+
+        if ($this->externalLink) {
+            return false;
+        }
+
+        return $this->url->path()->equals($markdown);
     }
 
     public function name(): string

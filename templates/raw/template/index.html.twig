@@ -17,7 +17,7 @@
         {% for entry in menu %}
             <li>
                 {% if entry.entries|length > 0 %}
-                    <details>
+                    <details {% if entry.openFor(currentFile) %}open{% endif %}>
                         <summary>
                             {% if entry.pointsSomewhere() %}
                                 <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>

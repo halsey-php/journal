@@ -19,9 +19,9 @@ return static function(Config $config): Config
             Entry::externalLink(
                 'Some external link',
                 Url::of('https://github.com/halsey-php'),
-                Entry::externalLink(
-                    'Sub menu',
-                    Url::of('https://github.com/halsey-php'),
+                Entry::markdown(
+                    'Index',
+                    Path::of('readme.md'),
                 ),
                 Entry::externalLink(
                     'Sub menu 2',
@@ -30,11 +30,11 @@ return static function(Config $config): Config
             ),
             Entry::section(
                 'Some section',
-                Entry::externalLink(
-                    'Sub menu',
-                    Url::of('https://github.com/halsey-php'),
+                Entry::markdown(
+                    'Nested markdown',
+                    Path::of('sub/readme.md'),
                 ),
-            ),
+            )->alwaysOpen(),
             Entry::externalLink(
                 'Some external link 2',
                 Url::of('https://github.com/halsey-php'),
