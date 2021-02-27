@@ -7,6 +7,7 @@ use Halsey\Journal\RewriteUrl;
 use Innmind\Url\{
     Url,
     Path,
+    RelativePath,
     Scheme,
     Authority,
     Query,
@@ -49,7 +50,7 @@ final class Entry
 
     public static function markdown(
         string $name,
-        Path $markdown,
+        RelativePath $markdown,
         self ...$entries
     ): self {
         return new self(
