@@ -25,6 +25,7 @@ use Innmind\Git\{
     Repository,
     Revision\Branch,
     Message,
+    Exception\CommandFailed,
 };
 use Innmind\Url\Path;
 
@@ -109,7 +110,12 @@ final class Publish implements Command
 
         $website->foreach(static fn(File $file) => $files->add($file));
         $repository->add(Path::of('.'));
-        $repository->commit(new Message('Publish new documentation'));
+
+        try {
+            $repository->commit(new Message('Publish new documentation'));
+        } catch (CommandFailed $e) {
+            // nothing to do here, this happens when there is nothing to commit
+        }
     }
 
     private function push(Repository $repository): void
