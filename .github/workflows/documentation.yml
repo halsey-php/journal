@@ -3,7 +3,7 @@ name: Documentation
 on: [push]
 
 jobs:
-  psalm:
+  publish:
     runs-on: ubuntu-latest
     name: 'Publish documentation'
     steps:
