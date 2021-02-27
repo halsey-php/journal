@@ -27,17 +27,15 @@
                                 {{ entry.name }}
                             {% endif %}
                         </summary>
-                        {% if entry.entries|length > 0 %}
-                            <ul>
-                                {% for subEntry in entry.entries %}
-                                    <li class="sub-item">
-                                        <a href="{{ subEntry.url.toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
-                                            {{ subEntry.name }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                        <ul>
+                            {% for subEntry in entry.entries %}
+                                <li class="sub-item">
+                                    <a href="{{ subEntry.url.toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                        {{ subEntry.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </details>
                 {% else %}
                     <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
