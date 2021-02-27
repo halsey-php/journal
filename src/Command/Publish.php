@@ -58,6 +58,7 @@ final class Publish implements Command
         );
         $website = ($this->generate)($config, $tmp);
         $repository = $this->git->repository($env->workingDirectory());
+        $head = $repository->head();
 
         $this->checkout($repository);
         $this->commit(
@@ -66,6 +67,7 @@ final class Publish implements Command
             $website,
         );
         $this->push($repository);
+        $repository->checkout()->revision($head);
     }
 
     public function toString(): string
