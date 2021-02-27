@@ -12,8 +12,8 @@ final class RewriteUrl
     {
         $string = Str::of($url->toString());
 
-        if ($string->toLower()->equals(Str::of('readme.md'))) {
-            return Url::of('index.html');
+        if ($string->toLower()->endsWith('readme.md')) {
+            return Url::of($string->dropEnd(9)->append('index.html')->toString());
         }
 
         if ($string->takeEnd(3)->toLower()->equals(Str::of('.md'))) {

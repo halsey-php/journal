@@ -21,4 +21,4 @@ Lists
 
 > Some quote
 
-Link to [self](readme.md)
+Link to [sub readme](sub/readme.md)
