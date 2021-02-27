@@ -14,10 +14,6 @@ use Innmind\CLI\{
     Environment,
 };
 use Innmind\OperatingSystem\OperatingSystem;
-use Innmind\Filesystem\{
-    Directory\Directory,
-    Name,
-};
 use Innmind\Url\Path;
 
 final class Generate implements Command
@@ -42,15 +38,10 @@ final class Generate implements Command
         $configure = require ($env->workingDirectory()->resolve(Path::of('.journal'))->toString());
         $config = $configure(new Config($env->workingDirectory()));
 
-        $tmp = $this->os->status()->tmp()->resolve(
-            Path::of("halsey-joural-{$this->os->process()->id()->toString()}/"),
+        ($this->generate)(
+            $config,
+            $env->workingDirectory()->resolve(Path::of('.tmp_journal/')),
         );
-        $website = ($this->generate)($config, $tmp);
-        $repository = $this->os->filesystem()->mount($env->workingDirectory());
-        $repository->add(new Directory(
-            new Name('.tmp_journal'),
-            $website->filter(static fn() => true),
-        ));
     }
 
     public function toString(): string
