@@ -33,6 +33,7 @@ final class Publish implements Command
     private OperatingSystem $os;
     private Git $git;
     private Generate $generate;
+    private Message $message;
 
     public function __construct(
         OperatingSystem $os,
@@ -42,6 +43,9 @@ final class Publish implements Command
         $this->os = $os;
         $this->git = $git;
         $this->generate = $generate;
+        // we create the message here to make sure the class is loaded before
+        // we remove the vendor directory when committing the website
+        $this->message = new Message('Publish new documentation');
     }
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
@@ -105,7 +109,7 @@ final class Publish implements Command
 
         $website->foreach(static fn(File $file) => $files->add($file));
         $repository->add(Path::of('.'));
-        $repository->commit(new Message('Publish new documentation'));
+        $repository->commit($this->message);
     }
 
     private function push(Repository $repository): void
