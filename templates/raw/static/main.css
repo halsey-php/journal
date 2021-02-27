@@ -6,6 +6,7 @@
     --link: rgb(0, 0, 238);
     --link-visited: rgb(85, 26, 139);
     --quote-background: rgba(41, 44, 51, 0.31);
+    --selected-menu-background: rgba(41, 44, 51, 0.31);
     --block-radius: 5px;
     --inline-background: rgb(41, 44, 51);
 }
@@ -54,15 +55,30 @@ aside > ul > li > a {
 aside a {
     text-decoration: none;
 }
+aside details ul {
+    list-style: none;
+    padding-left: 20px;
+}
+aside > ul > li.current {
+    background-color: var(--selected-menu-background);
+}
+li.current a {
+    color: var(--text-color);
+}
+.sub-item {
+    margin-top: var(--padding);
+    padding: 4px 10px;
+}
+.sub-item.current {
+    background-color: var(--selected-menu-background);
+    border-radius: var(--block-radius);
+}
 footer {
     grid-area: footer;
     border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.sub-item {
-    padding-top: var(--padding);
 }
 main {
     grid-area: main;

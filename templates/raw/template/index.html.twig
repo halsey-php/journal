@@ -15,7 +15,7 @@
     <aside>
         <ul>
         {% for entry in menu %}
-            <li>
+            <li {% if entry.url.path.equals(currentFile) %}class="current"{% endif %}>
                 {% if entry.entries|length > 0 %}
                     <details {% if entry.openFor(currentFile) %}open{% endif %}>
                         <summary>
@@ -29,7 +29,7 @@
                         </summary>
                         <ul>
                             {% for subEntry in entry.entries %}
-                                <li class="sub-item">
+                                <li class="sub-item {% if subEntry.url.path.equals(currentFile) %}current{% endif %}">
                                     <a href="{{ subEntry.url.toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
                                         {{ subEntry.name }}
                                     </a>
