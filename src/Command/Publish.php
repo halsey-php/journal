@@ -50,6 +50,8 @@ final class Publish implements Command
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
+        $env->error();
+        $env->output();
         /**
          * @psalm-suppress UnresolvableInclude
          * @var callable(Config): Config
