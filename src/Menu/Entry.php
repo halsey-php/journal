@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Halsey\Journal\Menu;
 
+use Halsey\Journal\RewriteUrl;
 use Innmind\Url\{
     Url,
     Path,
@@ -100,6 +101,19 @@ final class Entry
     public function url(): Url
     {
         return $this->url;
+    }
+
+    public function resolve(RewriteUrl $rewrite, Url $baseUrl): Url
+    {
+        if ($this->externalLink) {
+            return $this->url;
+        }
+
+        $rewritten = $rewrite($this->url);
+
+        return $baseUrl
+            ->withPath($baseUrl->path()->resolve($rewritten->path()))
+            ->withFragment($rewritten->fragment());
     }
 
     public function pointsElsewhere(): bool

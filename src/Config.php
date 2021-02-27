@@ -81,8 +81,14 @@ final class Config
      *
      * @return Map<string, mixed>
      */
-    public function forTemplating(): Map
+    public function forTemplating(bool $preview): Map
     {
+        $baseUrl = "https://{$this->organization}.github.io/{$this->package}/";
+
+        if ($preview) {
+            $baseUrl = 'http://localhost:2492/';
+        }
+
         /** @var Map<string, mixed> */
         $parameters = Map::of('string', 'mixed');
 
@@ -90,7 +96,7 @@ final class Config
             ('organization', $this->organization)
             ('vendor', $this->vendor)
             ('package', $this->package)
-            ('baseUrl', "https://{$this->organization}.github.io/{$this->package}/")
+            ('baseUrl', Url::of($baseUrl))
             ('repository', "https://github.com/{$this->organization}/{$this->package}/")
             ('menu', $this->menu);
     }

@@ -54,7 +54,7 @@ final class Markdown implements File
 
     public function content(): Readable
     {
-        $parameters = ($this->config->forTemplating())
+        $parameters = ($this->config->forTemplating($this->preview))
             (
                 'documentation',
                 (string) (new \Parsedown)->text(
@@ -62,10 +62,6 @@ final class Markdown implements File
                 ),
             )
             ('currentFile', $this->path);
-
-        if ($this->preview) {
-            $parameters = ($parameters)('baseUrl', 'http://localhost:2492/');
-        }
 
         return ($this->render)(
             $this->config->template()->entrypoint(),

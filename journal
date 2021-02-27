@@ -39,6 +39,7 @@ new class extends Main {
                 Path::of(__DIR__.'/templates/'),
                 null,
                 Map::of('string', 'object')
+                    ('rewriteUrl', $service('rewrite_url'))
                     ('helper', new Templating\Helper($service('rewrite_url'))),
             ))
             ->service('render', static fn($env, $os, $service) => new Render\All(

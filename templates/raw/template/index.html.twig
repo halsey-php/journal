@@ -2,15 +2,15 @@
 <html>
 <head>
     <title>{{ vendor ~ '/' ~ package }}</title>
-    <link rel="stylesheet" href="{{ baseUrl }}static/main.css">
-    <link rel="stylesheet" href="{{ baseUrl }}static/styles/default.css">
-    <link rel="stylesheet" href="{{ baseUrl }}static/styles/atom-one-dark.css">
-    <script src="{{ baseUrl }}static/highlight.pack.js"></script>
+    <link rel="stylesheet" href="{{ baseUrl.toString() }}static/main.css">
+    <link rel="stylesheet" href="{{ baseUrl.toString() }}static/styles/default.css">
+    <link rel="stylesheet" href="{{ baseUrl.toString() }}static/styles/atom-one-dark.css">
+    <script src="{{ baseUrl.toString() }}static/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
     <header>
-        <a href="{{ baseUrl }}"><code>{{ package }}</code></a>
+        <a href="{{ baseUrl.toString() }}"><code>{{ package }}</code></a>
     </header>
     <aside>
         <ul>
@@ -20,7 +20,7 @@
                     <details {% if entry.openFor(currentFile) %}open{% endif %}>
                         <summary>
                             {% if entry.pointsSomewhere() %}
-                                <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                <a href="{{ entry.resolve(rewriteUrl, baseUrl).toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
                                     {{ entry.name }}
                                 </a>
                             {% else %}
@@ -30,7 +30,7 @@
                         <ul>
                             {% for subEntry in entry.entries %}
                                 <li class="sub-item {% if subEntry.url.path.equals(currentFile) %}current{% endif %}">
-                                    <a href="{{ subEntry.url.toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                    <a href="{{ subEntry.resolve(rewriteUrl, baseUrl).toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
                                         {{ subEntry.name }}
                                     </a>
                                 </li>
@@ -38,7 +38,7 @@
                         </ul>
                     </details>
                 {% else %}
-                    <a href="{{ entry.url.toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                    <a href="{{ entry.resolve(rewriteUrl, baseUrl).toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
                         {{ entry.name }}
                     </a>
                 {% endif %}
