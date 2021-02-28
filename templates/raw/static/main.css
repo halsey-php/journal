@@ -129,7 +129,7 @@ blockquote, code {
     border-radius: var(--block-radius);
 }
 
-header code, p > code {
+header code, p > code, p > a > code {
     background-color: var(--inline-background);
     padding: 4px 6px;
     color: rgb(178, 183, 189);
