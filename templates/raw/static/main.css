@@ -18,7 +18,7 @@ body {
         "header main"
         "aside main"
         "footer main";
-    grid-template-rows: 50px 1fr 5%;
+    grid-template-rows: 50px 1fr 50px;
     grid-template-columns: 20% 1fr;
     min-height: 100vh;
     font-family: "Helvetica";
