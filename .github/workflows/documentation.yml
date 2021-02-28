@@ -1,0 +1,36 @@
+name: Documentation
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: 'Publish documentation'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, intl
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-
+      - name: Install Dependencies
+        run: composer install --no-progress
+      - name: Generate
+        run: ./journal generate
+      - name: Push
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.tmp_journal/

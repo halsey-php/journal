@@ -1,0 +1,84 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types = 1);
+
+$paths = [
+    __DIR__.'/vendor/autoload.php',
+    __DIR__ . '/../../../vendor/autoload.php',
+];
+
+foreach ($paths as $file) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+
+use Halsey\Journal\{
+    Command,
+    Generate,
+    Render,
+    RewriteUrl,
+    Templating,
+    Load,
+};
+use Innmind\CLI\Framework\{
+    Main,
+    Application,
+};
+use Innmind\Git\Git;
+use function Innmind\Templating\bootstrap as templating;
+use function Innmind\Html\bootstrap as html;
+use Innmind\Url\Path;
+use Innmind\Immutable\Map;
+
+new class extends Main {
+    protected function configure(Application $app): Application
+    {
+        return $app
+            ->service('load', static fn() => new Load)
+            ->service('rewrite_url', static fn() => new RewriteUrl)
+            ->service('templating', static fn($env, $os, $service) => templating(
+                Path::of(__DIR__.'/templates/'),
+                null,
+                Map::of('string', 'object')
+                    ('rewriteUrl', $service('rewrite_url'))
+                    ('helper', new Templating\Helper($service('rewrite_url'))),
+            ))
+            ->service('render', static fn($env, $os, $service) => new Render\All(
+                new Render\Markdown(
+                    $service('rewrite_url'),
+                    $service('templating'),
+                    $env->arguments()->contains('preview'),
+                ),
+                new Render\RewriteHtml(
+                    $service('rewrite_url'),
+                    html(),
+                ),
+                new Render\AddStaticFiles($os, Path::of(__DIR__.'/')),
+            ))
+            ->service('generate_website', static fn($env, $os, $service) => new Generate(
+                $os,
+                $service('render'),
+            ))
+            ->service('preview', static fn($env, $os, $service) => new Command\Preview(
+                $os,
+                $service('generate_website'),
+                $service('load'),
+            ))
+            ->service('generate', static fn($env, $os, $service) => new Command\Generate(
+                $os,
+                $service('generate_website'),
+                $service('load'),
+            ))
+            ->service('publish', static fn($env, $os, $service) => new Command\Publish(
+                $os,
+                new Git($os->control(), $os->clock()),
+                $service('generate_website'),
+                $service('load'),
+            ))
+            ->command('preview')
+            ->command('publish')
+            ->command('generate');
+    }
+};

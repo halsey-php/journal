@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ vendor ~ '/' ~ package }}</title>
+    <link rel="stylesheet" href="{{ baseUrl.toString() }}static/main.css">
+    <link rel="stylesheet" href="{{ baseUrl.toString() }}static/styles/default.css">
+    <link rel="stylesheet" href="{{ baseUrl.toString() }}static/styles/atom-one-dark.css">
+    <script src="{{ baseUrl.toString() }}static/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <header>
+        <a href="{{ baseUrl.toString() }}"><code>{{ package }}</code></a>
+    </header>
+    <aside>
+        <ul>
+        {% for entry in menu %}
+            <li {% if entry.url.path.equals(currentFile) %}class="current"{% endif %}>
+                {% if entry.entries|length > 0 %}
+                    <details {% if entry.openFor(currentFile) %}open{% endif %}>
+                        <summary>
+                            {% if entry.pointsSomewhere() %}
+                                <a href="{{ entry.resolve(rewriteUrl, baseUrl).toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                    {{ entry.name }}
+                                </a>
+                            {% else %}
+                                {{ entry.name }}
+                            {% endif %}
+                        </summary>
+                        <ul>
+                            {% for subEntry in entry.entries %}
+                                <li class="sub-item {% if subEntry.url.path.equals(currentFile) %}current{% endif %}">
+                                    <a href="{{ subEntry.resolve(rewriteUrl, baseUrl).toString() }}" {% if subEntry.pointsElsewhere() %}target="_blank"{% endif %}>
+                                        {{ subEntry.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                {% else %}
+                    <a href="{{ entry.resolve(rewriteUrl, baseUrl).toString() }}" {% if entry.pointsElsewhere() %}target="_blank"{% endif %}>
+                        {{ entry.name }}
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </aside>
+    <main>{{ documentation|raw }}</main>
+    <footer>
+        <a href="{{ repository }}" target="_blank">GitHub</a>
+    </footer>
+</body>
+</html>

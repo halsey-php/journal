@@ -1,0 +1,45 @@
+<?php
+declare(strict_types = 1);
+
+use Halsey\Journal\{
+    Config,
+    Menu\Entry,
+};
+use Innmind\Url\{
+    Url,
+    Path,
+};
+
+return static function(Config $config): Config
+{
+    return $config
+        ->package('halsey', 'journal', 'halsey-php')
+        ->menu(
+            Entry::section(
+                'How to use',
+                Entry::markdown(
+                    'Getting started',
+                    Path::of('getting_started.md'),
+                ),
+                Entry::markdown(
+                    'Configuration',
+                    Path::of('configuration.md'),
+                ),
+                Entry::markdown(
+                    'CLI commands',
+                    Path::of('commands.md'),
+                ),
+            )->alwaysOpen(),
+            Entry::section(
+                'Publication',
+                Entry::markdown(
+                    'Via GitHub Action',
+                    Path::of('publication/github_action.md'),
+                ),
+                Entry::markdown(
+                    'Manually',
+                    Path::of('publication/manually.md'),
+                ),
+            )->alwaysOpen(),
+        );
+};
