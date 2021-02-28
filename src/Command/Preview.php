@@ -55,8 +55,9 @@ final class Preview implements Command
         $this->openBrowser();
         $output("Webserver available at: http://localhost:2492\n");
 
-        $watch(function() use ($output, $tmp, $config): void {
+        $watch(function() use ($output, $tmp, $env): void {
             $output('folder changed, regenerating...');
+            $config = ($this->load)($env->workingDirectory());
             ($this->generate)($config, $tmp);
             $output(" ok\n");
             $this->openBrowser();
