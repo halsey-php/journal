@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html><head><title>halsey/journal</title><link rel="stylesheet" href="https://halsey-php.github.io/journal/static/main.css"/><link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/default.css"/><link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/atom-one-dark.css"/><script src="https://halsey-php.github.io/journal/static/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body>
+    <header><a href="https://halsey-php.github.io/journal/"><code>journal</code></a>
+    </header><aside><ul><li>
+                                    <details open><summary>
+                                                            How to use
+                                                    </summary><ul><li class="sub-item ">
+                                    <a href="https://halsey-php.github.io/journal/getting_started.html">
+                                        Getting started
+                                    </a>
+                                </li>
+                                                            <li class="sub-item current">
+                                    <a href="https://halsey-php.github.io/journal/configuration.html">
+                                        Configuration
+                                    </a>
+                                </li>
+                                                            <li class="sub-item ">
+                                    <a href="https://halsey-php.github.io/journal/commands.html">
+                                        CLI commands
+                                    </a>
+                                </li>
+                                                    </ul></details></li>
+                    <li>
+                                    <details open><summary>
+                                                            Publication
+                                                    </summary><ul><li class="sub-item ">
+                                    <a href="https://halsey-php.github.io/journal/publication/github_action.html">
+                                        Via GitHub Action
+                                    </a>
+                                </li>
+                                                            <li class="sub-item ">
+                                    <a href="https://halsey-php.github.io/journal/publication/manually.html">
+                                        Manually
+                                    </a>
+                                </li>
+                                                    </ul></details></li>
+                </ul></aside><main><h1 id="configuration"><a href="#configuration" class="anchor">#</a>Configuration</h1>
+<p>All the configuration is done the <code>.journal</code> file at the root of your repository.</p>
+<h2 id="specify-the-package-the-documentation-is-for"><a href="#specify-the-package-the-documentation-is-for" class="anchor">#</a>Specify the package the documentation is for</h2>
+<p>The first config to specify is the vendor and package name so that the tool can generate the correct urls for your website. You do so like this.</p>
+<pre><code class="language-php">use Halsey\Journal\Config;
+
+return static function(Config $config): Config
+{
+    return $config->package('{vendor}', '{package}');
+}</code></pre>
+<p><code>{vendor}</code> and <code>{package}</code> are to be replaced by the values you use in your <code>composer.json</code> to reference your package.</p>
+<p><strong>Note</strong>: In some cases the vendor and the package names are not identical to the organization/user and repository names, you can specify them with the 3rd and 4th arguments respectively.</p>
+<h2 id="add-links-in-the-menu"><a href="#add-links-in-the-menu" class="anchor">#</a>Add links in the menu</h2>
+<p>You can add 3 types of elements to the menu: links, sections and external links. Each one can be composed with other 2 types.</p>
+<p><strong>Note</strong>: depending on the template used the displayed tree may be limited, the default <code>raw</code> template only allow 1 level of nested entries.</p>
+<p><strong>Note 2</strong>: entries with sub entries can be configured to always be opened by calling the <code>->alwaysOpen()</code> method on the parent entry.</p>
+<h3 id="links"><a href="#links" class="anchor">#</a>Links</h3>
+<p>The links are relative paths to the markdown files inside your documentation folder, you can add them like so:</p>
+<pre><code class="language-php">use Halsey\Journal\{
+    Config,
+    Menu\Entry,
+};
+use Innmind\Url\Path;
+
+return static function(Config $config): Config
+{
+    return $config
+        // other config options
+        ->menu(Entry::markdown(
+            'The name to display in the menu',
+            Path::of('relative/path/to/markdown.md'),
+        ));
+}</code></pre>
+<p>To add a sub menu to this entry you can additional entries as 3rd argument.</p>
+<h3 id="sections"><a href="#sections" class="anchor">#</a>Sections</h3>
+<p>A section is a collection of entries and can be configured like so:</p>
+<pre><code class="language-php">use Halsey\Journal\{
+    Config,
+    Menu\Entry,
+};
+use Innmind\Url\Path;
+
+return static function(Config $config): Config
+{
+    return $config
+        // other config options
+        ->menu(Entry::section(
+            'Section name to display in the menu',
+            Entry::markdown(
+                'Sub entry',
+                Path::of('relative/path/to/markdown.md'),
+            ),
+            // you can add as many as you want
+        ));
+}</code></pre>
+<h3 id="external-links"><a href="#external-links" class="anchor">#</a>External links</h3>
+<p>Use this kind of entry to point elsewhere than the local documentation.</p>
+<pre><code class="language-php">use Halsey\Journal\{
+    Config,
+    Menu\Entry,
+};
+use Innmind\Url\Url;
+
+return static function(Config $config): Config
+{
+    return $config
+        // other config options
+        ->menu(Entry::externalLink(
+            'The name to display in the menu',
+            Url::of('http://example.com'),
+        ));
+}</code></pre>
+<h2 id="changing-the-documentation-folder"><a href="#changing-the-documentation-folder" class="anchor">#</a>Changing the documentation folder</h2>
+<p>By default the folder used is <code>documentation/</code> but you can change it in case you already have a documentation named differently.</p>
+<pre><code class="language-php">use Halsey\Journal\Config;
+use Innmind\Url\Path;
+
+return static function(Config $config): Config
+{
+    return $config
+        // other config options
+        ->locatedAt(Path::of('docs/'));
+}</code></pre>
+<p><strong>Important</strong>: the specified path must be relative from the root of your repository and must end with a <code>/</code> to indicate it's a directory. If you don't the config will throw an exception.</p></main><footer><a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
+    </footer></body></html>

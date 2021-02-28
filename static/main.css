@@ -18,7 +18,7 @@ body {
         "header main"
         "aside main"
         "footer main";
-    grid-template-rows: 50px 1fr 5%;
+    grid-template-rows: 50px 1fr 50px;
     grid-template-columns: 20% 1fr;
     min-height: 100vh;
     font-family: "Helvetica";
@@ -86,6 +86,9 @@ main {
     border-left: 1px solid var(--border-color);
     padding: var(--padding) 40px;
 }
+main pre code.hljs {
+    padding: 20px;
+}
 h1, h2, h3, h4, h5, h6 {
     padding-bottom: var(--padding);
     border-bottom: 1px solid var(--light-border-color);
@@ -126,7 +129,7 @@ blockquote, code {
     border-radius: var(--block-radius);
 }
 
-header code, p > code {
+header code, p > code, p > a > code {
     background-color: var(--inline-background);
     padding: 4px 6px;
     color: rgb(178, 183, 189);

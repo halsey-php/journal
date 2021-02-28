@@ -14,7 +14,7 @@
                                         Configuration
                                     </a>
                                 </li>
-                                                            <li class="sub-item ">
+                                                            <li class="sub-item current">
                                     <a href="https://halsey-php.github.io/journal/commands.html">
                                         CLI commands
                                     </a>
@@ -34,7 +34,15 @@
                                     </a>
                                 </li>
                                                     </ul></details></li>
-                </ul></aside><main><h1 id="journal"><a href="#journal" class="anchor">#</a>Journal</h1>
-<p><code>halsey/journal</code> is a simple tool to transform your documentation written with markdown into a website hosted on <a href="https://pages.github.com/">GitHub Pages</a>.</p>
-<p>This tool is tailored toward the needs of the <a href="https://github.com/innmind/">Innmind</a> organization. If you need a more generic approach you should take a look at <a href="https://couscous.io/">Couscous</a>.</p></main><footer><a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
+                </ul></aside><main><h1 id="cli-commands"><a href="#cli-commands" class="anchor">#</a>CLI commands</h1>
+<p><code>halsey/journal</code> comes with only 3 commands: <code>preview</code>, <code>generate</code> and <code>pubblish</code>.</p>
+<p>Each command must be run at the root of your repository so it can correctly find the <a href="configuration.html"><code>.journal</code> configuration</a>.</p>
+<h2 id="journal-preview"><a href="#journal-preview" class="anchor">#</a><code>journal preview</code></h2>
+<p>This command will start a webserver available at <code>http://localhost:2492/</code> and will regenerate the website every time you modify the documentation.</p>
+<p><strong>Note</strong>: the <code>.journal</code> configuration is also reloaded each time, however it is not watched for changes.</p>
+<p><strong>Note 2</strong>: the webserver is automatically killed when you stop the preview command.</p>
+<h2 id="journal-generate"><a href="#journal-generate" class="anchor">#</a><code>journal generate</code></h2>
+<p>This command will generate the website in the <code>.tmp_journal/</code> folder at the root of your repository. This command should only be used to <a href="publication/github_action.html">publish the website via a GitHubAction</a>.</p>
+<h2 id="journal-publish"><a href="#journal-publish" class="anchor">#</a><code>journal publish</code></h2>
+<p>This command will automatically generate the website in the <code>gh-pages</code> branch. It should only be used to <a href="publication/manually.html">publish the website manually</a>.</p></main><footer><a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
     </footer></body></html>
