@@ -6,6 +6,7 @@ namespace Halsey\Journal\Command;
 use Halsey\Journal\{
     Config,
     Generate as GenerateWebsite,
+    Load,
 };
 use Innmind\CLI\{
     Command,
@@ -20,23 +21,21 @@ final class Generate implements Command
 {
     private OperatingSystem $os;
     private GenerateWebsite $generate;
+    private Load $load;
 
     public function __construct(
         OperatingSystem $os,
-        GenerateWebsite $generate
+        GenerateWebsite $generate,
+        Load $load
     ) {
         $this->os = $os;
         $this->generate = $generate;
+        $this->load = $load;
     }
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
-        /**
-         * @psalm-suppress UnresolvableInclude
-         * @var callable(Config): Config
-         */
-        $configure = require ($env->workingDirectory()->resolve(Path::of('.journal'))->toString());
-        $config = $configure(new Config($env->workingDirectory()));
+        $config = ($this->load)($env->workingDirectory());
 
         ($this->generate)(
             $config,

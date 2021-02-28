@@ -6,6 +6,7 @@ namespace Halsey\Journal\Command;
 use Halsey\Journal\{
     Config,
     Generate,
+    Load,
 };
 use Innmind\CLI\{
     Command,
@@ -34,25 +35,23 @@ final class Publish implements Command
     private OperatingSystem $os;
     private Git $git;
     private Generate $generate;
+    private Load $load;
 
     public function __construct(
         OperatingSystem $os,
         Git $git,
-        Generate $generate
+        Generate $generate,
+        Load $load
     ) {
         $this->os = $os;
         $this->git = $git;
         $this->generate = $generate;
+        $this->load = $load;
     }
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
-        /**
-         * @psalm-suppress UnresolvableInclude
-         * @var callable(Config): Config
-         */
-        $configure = require ($env->workingDirectory()->resolve(Path::of('.journal'))->toString());
-        $config = $configure(new Config($env->workingDirectory()));
+        $config = ($this->load)($env->workingDirectory());
 
         $tmp = $this->os->status()->tmp()->resolve(
             Path::of("halsey-joural-{$this->os->process()->id()->toString()}/"),
