@@ -14,30 +14,32 @@ return static function(Config $config): Config
 {
     return $config
         ->package('halsey', 'journal', 'halsey-php')
-        ->locatedAt(Path::of('example/'))
         ->menu(
-            Entry::externalLink(
-                'Some external link',
-                Url::of('https://github.com/halsey-php'),
-                Entry::markdown(
-                    'Index',
-                    Path::of('readme.md'),
-                ),
-                Entry::externalLink(
-                    'Sub menu 2',
-                    Url::of('https://github.com/halsey-php'),
-                ),
-            ),
             Entry::section(
-                'Some section',
+                'How to use',
                 Entry::markdown(
-                    'Nested markdown',
-                    Path::of('sub/readme.md'),
+                    'Getting started',
+                    Path::of('getting_started.md'),
+                ),
+                Entry::markdown(
+                    'Configuration',
+                    Path::of('configuration.md'),
+                ),
+                Entry::markdown(
+                    'CLI commands',
+                    Path::of('commands.md'),
                 ),
             )->alwaysOpen(),
-            Entry::markdown(
-                'Headings',
-                Path::of('headings.md'),
-            ),
+            Entry::section(
+                'Publication',
+                Entry::markdown(
+                    'Via GitHub Action',
+                    Path::of('publication/github_action.md'),
+                ),
+                Entry::markdown(
+                    'Manually',
+                    Path::of('publication/manually.md'),
+                ),
+            )->alwaysOpen(),
         );
 };
