@@ -57,28 +57,28 @@ new class extends Main {
                 ),
                 new Render\AddStaticFiles($os, Path::of(__DIR__.'/')),
             ))
-            ->service('generate', static fn($env, $os, $service) => new Generate(
+            ->service('generate_website', static fn($env, $os, $service) => new Generate(
                 $os,
                 $service('render'),
             ))
             ->service('preview', static fn($env, $os, $service) => new Command\Preview(
                 $os,
-                $service('generate'),
+                $service('generate_website'),
                 $service('load'),
             ))
-            ->service('generate_command', static fn($env, $os, $service) => new Command\Generate(
+            ->service('generate', static fn($env, $os, $service) => new Command\Generate(
                 $os,
-                $service('generate'),
+                $service('generate_website'),
                 $service('load'),
             ))
             ->service('publish', static fn($env, $os, $service) => new Command\Publish(
                 $os,
                 new Git($os->control(), $os->clock()),
-                $service('generate'),
+                $service('generate_website'),
                 $service('load'),
             ))
             ->command('preview')
             ->command('publish')
-            ->command('generate_command');
+            ->command('generate');
     }
 };
