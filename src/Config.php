@@ -17,6 +17,7 @@ final class Config
     private RelativePath $documentation;
     private Template $template;
     private string $organization = '';
+    private string $repository = '';
     private string $vendor = '';
     private string $package = '';
     /** @var list<Entry> */
@@ -33,10 +34,15 @@ final class Config
         $this->template = Template::raw();
     }
 
-    public function package(string $vendor, string $package, string $organization = null): self
-    {
+    public function package(
+        string $vendor,
+        string $package,
+        string $organization = null,
+        string $repository = null
+    ): self {
         $self = clone $this;
         $self->organization = $organization ?? $vendor;
+        $self->repository = $repository ?? $package;
         $self->vendor = $vendor;
         $self->package = $package;
 
@@ -86,7 +92,7 @@ final class Config
      */
     public function forTemplating(bool $preview): Map
     {
-        $baseUrl = "https://{$this->organization}.github.io/{$this->package}/";
+        $baseUrl = "https://{$this->organization}.github.io/{$this->repository}/";
 
         if ($preview) {
             $baseUrl = 'http://localhost:2492/';
@@ -100,7 +106,7 @@ final class Config
             ('vendor', $this->vendor)
             ('package', $this->package)
             ('baseUrl', Url::of($baseUrl))
-            ('repository', "https://github.com/{$this->organization}/{$this->package}/")
+            ('repository', "https://github.com/{$this->organization}/{$this->repository}/")
             ('menu', $this->menu);
     }
 }
