@@ -75,6 +75,9 @@ final class Entry
         return $self;
     }
 
+    /**
+     * @internal
+     */
     public function openFor(Path $markdown): bool
     {
         if ($this->alwaysOpen) {
@@ -94,16 +97,25 @@ final class Entry
         return $this->url->path()->equals($markdown);
     }
 
+    /**
+     * @internal
+     */
     public function name(): string
     {
         return $this->name;
     }
 
+    /**
+     * @internal
+     */
     public function url(): Url
     {
         return $this->url;
     }
 
+    /**
+     * @internal
+     */
     public function resolve(RewriteUrl $rewrite, Url $baseUrl): Url
     {
         if ($this->externalLink) {
@@ -117,17 +129,25 @@ final class Entry
             ->withFragment($rewritten->fragment());
     }
 
+    /**
+     * @internal
+     */
     public function pointsElsewhere(): bool
     {
         return $this->externalLink;
     }
 
+    /**
+     * @internal
+     */
     public function pointsSomewhere(): bool
     {
         return !$this->url->equals(Url::of('#'));
     }
 
     /**
+     * @internal
+     *
      * @return list<self>
      */
     public function entries(): array

@@ -22,6 +22,9 @@ final class Config
     /** @var list<Entry> */
     private array $menu = [];
 
+    /**
+     * @internal
+     */
     public function __construct(Path $project)
     {
         $this->project = $project;
