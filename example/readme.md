@@ -22,3 +22,9 @@ Lists
 > Some quote
 
 Link to [sub readme](sub/readme.md)
+
+| Table |
+|-|
+| first line |
+| second line |
+| `third line` |
