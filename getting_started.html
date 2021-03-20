@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html><head><title>halsey/journal</title><link rel="stylesheet" href="https://halsey-php.github.io/journal/static/main.css"/><link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/default.css"/><link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/atom-one-dark.css"/><script src="https://halsey-php.github.io/journal/static/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body>
-    <header><a href="https://halsey-php.github.io/journal/"><code>journal</code></a>
-    </header><aside><ul><li>
-                                    <details open><summary>
+<html>
+<head>
+    <title>halsey/journal</title>
+    <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/main.css"/>
+    <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/default.css"/>
+    <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/atom-one-dark.css"/>
+    <script src="https://halsey-php.github.io/journal/static/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <header>
+        <a href="https://halsey-php.github.io/journal/"><code>journal</code></a>
+    </header>
+    <aside>
+        <ul>
+                    <li>
+                                    <details open>
+                        <summary>
                                                             How to use
-                                                    </summary><ul><li class="sub-item current">
+                                                    </summary>
+                        <ul>
+                                                            <li class="sub-item current">
                                     <a href="https://halsey-php.github.io/journal/getting_started.html">
                                         Getting started
                                     </a>
@@ -19,11 +35,16 @@
                                         CLI commands
                                     </a>
                                 </li>
-                                                    </ul></details></li>
+                                                    </ul>
+                    </details>
+                            </li>
                     <li>
-                                    <details open><summary>
+                                    <details open>
+                        <summary>
                                                             Publication
-                                                    </summary><ul><li class="sub-item ">
+                                                    </summary>
+                        <ul>
+                                                            <li class="sub-item ">
                                     <a href="https://halsey-php.github.io/journal/publication/github_action.html">
                                         Via GitHub Action
                                     </a>
@@ -33,8 +54,12 @@
                                         Manually
                                     </a>
                                 </li>
-                                                    </ul></details></li>
-                </ul></aside><main><h1 id="getting-started"><a href="#getting-started" class="anchor">#</a>Getting started</h1>
+                                                    </ul>
+                    </details>
+                            </li>
+                </ul>
+    </aside>
+    <main><h1 id="getting-started"><a href="#getting-started" class="anchor">#</a>Getting started</h1>
 <h2 id="installation"><a href="#installation" class="anchor">#</a>Installation</h2>
 <p>You can choose to either install the tool locally or globally via composer. By installing it locally you may encounter problems due to versions conflicts with dependencies of your package, that's why it is preferred to install it globally.</p>
 <p>Globally:</p>
@@ -45,14 +70,20 @@
 <p><strong>Note</strong>: if you added the composer global bin directory in your <code>$PATH</code> you can simply use <code>journal</code>.</p>
 <h2 id="first-steps"><a href="#first-steps" class="anchor">#</a>First steps</h2>
 <p>Before using the cli tool you need to add 2 things to your project in order to make all this work:</p>
-<ul><li>create a <code>documentation/</code> folder at the root of your repository</li>
+<ul>
+<li>create a <code>documentation/</code> folder at the root of your repository</li>
 <li>create a <code>.journal</code> file at the root of your repository</li>
-</ul><p>The <code>documentation/</code> folder will contain all your markdown files the same way you would normally write them (no special format required). The folder can also contain any extra file you may want such as images, videos, audio or anything else and will be also published to the website so you can safely reference them in your markdown files.</p>
+</ul>
+<p>The <code>documentation/</code> folder will contain all your markdown files the same way you would normally write them (no special format required). The folder can also contain any extra file you may want such as images, videos, audio or anything else and will be also published to the website so you can safely reference them in your markdown files.</p>
 <p>The <code>.journal</code> file is a PHP file that will contain the <a href="configuration.html">configuration</a> of the website. It must look like this:</p>
 <pre><code class="language-php">use Halsey\Journal\Config;
 
 return static function(Config $config): Config
 {
     return $config->package('{vendor}', '{package}');
-}</code></pre></main><footer><a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
-    </footer></body></html>
+}</code></pre></main>
+    <footer>
+        <a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
+    </footer>
+</body>
+</html>
