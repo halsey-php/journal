@@ -21,7 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4' # change the version to the one supported by your project
+          php-version: '8.1' # change the version to the one supported by your project
       - name: Install halsey/journal
         run: composer global require halsey/journal
       - name: Generate

@@ -36,10 +36,6 @@ return static function(Config $config): Config
                     'Via GitHub Action',
                     Path::of('publication/github_action.md'),
                 ),
-                Entry::markdown(
-                    'Manually',
-                    Path::of('publication/manually.md'),
-                ),
             )->alwaysOpen(),
         );
 };

@@ -1,6 +1,6 @@
 # CLI commands
 
-`halsey/journal` comes with only 3 commands: `preview`, `generate` and `pubblish`.
+`halsey/journal` comes with only 2 commands: `preview` and `generate`.
 
 Each command must be run at the root of your repository so it can correctly find the [`.journal` configuration](configuration.md).
 
@@ -14,8 +14,4 @@ This command will start a webserver available at `http://localhost:2492/` and wi
 
 ## `journal generate`
 
-This command will generate the website in the `.tmp_journal/` folder at the root of your repository. This command should only be used to [publish the website via a GitHubAction](publication/github_action.md).
-
-## `journal publish`
-
-This command will automatically generate the website in the `gh-pages` branch. It should only be used to [publish the website manually](publication/manually.md).
+This command will generate the website in the `.tmp_journal/` folder at the root of your repository. This command should only be used to [publish the website via a GitHub Action](publication/github_action.md).
