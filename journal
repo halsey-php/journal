@@ -28,7 +28,6 @@ use Innmind\CLI\{
     Commands,
 };
 use Innmind\OperatingSystem\OperatingSystem;
-use Innmind\Git\Git;
 use Innmind\Templating\Factory;
 use Innmind\Html\Reader\Reader;
 use Innmind\Url\Path;
@@ -63,23 +62,6 @@ new class extends Main {
         $run = Commands::of(
             new Command\Preview($os, $generateWebsite, $load),
             new Command\Generate($generateWebsite, $load),
-            new Command\Publish(
-                $os,
-                Git::of(
-                    $os->control(),
-                    $os->clock(),
-                    $env
-                        ->variables()
-                        ->get('HOME')
-                        ->map(Path::of(...))
-                        ->match(
-                            static fn($home) => $home,
-                            static fn() => throw new \RuntimeException,
-                        ),
-                ),
-                $generateWebsite,
-                $load,
-            ),
         );
 
         return $run($env);

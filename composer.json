@@ -21,8 +21,7 @@
         "erusev/parsedown": "^1.7",
         "erusev/parsedown-extra": "^0.8.1",
         "innmind/templating": "~3.0",
-        "innmind/html": "~6.0",
-        "innmind/git": "^3.0.2"
+        "innmind/html": "~6.0"
     },
     "autoload": {
         "psr-4": {
