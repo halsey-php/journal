@@ -12,21 +12,17 @@ use Innmind\CLI\{
     Command,
     Console,
 };
-use Innmind\OperatingSystem\OperatingSystem;
 use Innmind\Url\Path;
 
 final class Generate implements Command
 {
-    private OperatingSystem $os;
     private GenerateWebsite $generate;
     private Load $load;
 
     public function __construct(
-        OperatingSystem $os,
         GenerateWebsite $generate,
         Load $load,
     ) {
-        $this->os = $os;
         $this->generate = $generate;
         $this->load = $load;
     }

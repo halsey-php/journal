@@ -63,7 +63,7 @@ new class extends Main {
 
         $run = Commands::of(
             new Command\Preview($os, $generateWebsite, $load),
-            new Command\Generate($os, $generateWebsite, $load),
+            new Command\Generate($generateWebsite, $load),
             new Command\Publish(
                 $os,
                 Git::of(
