@@ -11,6 +11,9 @@ use Innmind\Url\{
 };
 use Innmind\Immutable\Map;
 
+/**
+ * @psalm-immutable
+ */
 final class Config
 {
     private Path $project;
@@ -23,15 +26,21 @@ final class Config
     /** @var list<Entry> */
     private array $menu = [];
 
-    /**
-     * @internal
-     */
-    public function __construct(Path $project)
+    private function __construct(Path $project)
     {
         $this->project = $project;
         /** @var RelativePath */
         $this->documentation = Path::of('documentation/');
         $this->template = Template::raw;
+    }
+
+    /**
+     * @internal
+     * @psalm-pure
+     */
+    public static function of(Path $project): self
+    {
+        return new self($project);
     }
 
     public function package(

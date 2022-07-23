@@ -15,6 +15,6 @@ final class Load
          */
         $configure = require $workingDirectory->resolve(Path::of('.journal'))->toString();
 
-        return $configure(new Config($workingDirectory));
+        return $configure(Config::of($workingDirectory));
     }
 }
