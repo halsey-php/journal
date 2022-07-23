@@ -49,6 +49,9 @@ final class Config
         return $self;
     }
 
+    /**
+     * @no-named-arguments
+     */
     public function menu(Entry ...$menu): self
     {
         $self = clone $this;

@@ -23,6 +23,9 @@ final class Entry
     private array $entries;
     private bool $alwaysOpen = false;
 
+    /**
+     * @no-named-arguments
+     */
     private function __construct(
         string $name,
         Url $url,
@@ -35,6 +38,9 @@ final class Entry
         $this->entries = $entries;
     }
 
+    /**
+     * @no-named-arguments
+     */
     public static function externalLink(
         string $name,
         Url $url,
@@ -43,11 +49,17 @@ final class Entry
         return new self($name, $url, true, ...$entries);
     }
 
+    /**
+     * @no-named-arguments
+     */
     public static function section(string $name, self $first, self ...$entries): self
     {
         return new self($name, Url::of('#'), false, $first, ...$entries);
     }
 
+    /**
+     * @no-named-arguments
+     */
     public static function markdown(
         string $name,
         RelativePath $markdown,
