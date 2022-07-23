@@ -15,7 +15,7 @@
         "issues": "http://github.com/halsey/journal/issues"
     },
     "require": {
-        "php": "~7.4|~8.0",
+        "php": "~8.1",
         "innmind/url": "^3.6",
         "innmind/cli": "~2.3",
         "erusev/parsedown": "^1.7",
