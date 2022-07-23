@@ -59,10 +59,8 @@ final class Preview implements Command
                 $console = $console->output(Str::of('folder changed, regenerating...'));
                 $config = ($this->load)($console->workingDirectory());
                 ($this->generate)($config, $tmp);
-                $console = $console->output(Str::of(" ok\n"));
-                $this->openBrowser();
 
-                return Either::right($console);
+                return Either::right($console->output(Str::of(" ok\n")));
             },
         )->match(
             static fn($console) => $console,
