@@ -26,7 +26,7 @@ final class Generate implements Command
     public function __construct(
         OperatingSystem $os,
         GenerateWebsite $generate,
-        Load $load
+        Load $load,
     ) {
         $this->os = $os;
         $this->generate = $generate;

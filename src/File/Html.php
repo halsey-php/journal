@@ -36,7 +36,7 @@ final class Html implements File
     public function __construct(
         RewriteUrl $rewrite,
         Reader $reader,
-        Markdown $markdown
+        Markdown $markdown,
     ) {
         $this->rewrite = $rewrite;
         $this->read = $reader;

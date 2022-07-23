@@ -23,7 +23,7 @@ final class RewriteHtml implements Render
 
     public function __construct(
         RewriteUrl $rewrite,
-        Reader $reader
+        Reader $reader,
     ) {
         $this->rewrite = $rewrite;
         $this->reader = $reader;

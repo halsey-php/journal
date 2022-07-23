@@ -34,7 +34,7 @@ final class Markdown implements File
         Config $config,
         File $markdown,
         ?Path $parent,
-        bool $preview
+        bool $preview,
     ) {
         $name = Path::of($markdown->name()->toString());
         $this->rewrite = $rewrite;

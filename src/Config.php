@@ -38,7 +38,7 @@ final class Config
         string $vendor,
         string $package,
         string $organization = null,
-        string $repository = null
+        string $repository = null,
     ): self {
         $self = clone $this;
         $self->organization = $organization ?? $vendor;

@@ -27,7 +27,7 @@ final class Entry
         string $name,
         Url $url,
         bool $externalLink,
-        self ...$entries
+        self ...$entries,
     ) {
         $this->name = $name;
         $this->url = $url;
@@ -38,7 +38,7 @@ final class Entry
     public static function externalLink(
         string $name,
         Url $url,
-        self ...$entries
+        self ...$entries,
     ): self {
         return new self($name, $url, true, ...$entries);
     }
@@ -51,7 +51,7 @@ final class Entry
     public static function markdown(
         string $name,
         RelativePath $markdown,
-        self ...$entries
+        self ...$entries,
     ): self {
         return new self(
             $name,

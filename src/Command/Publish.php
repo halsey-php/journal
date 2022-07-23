@@ -41,7 +41,7 @@ final class Publish implements Command
         OperatingSystem $os,
         Git $git,
         Generate $generate,
-        Load $load
+        Load $load,
     ) {
         $this->os = $os;
         $this->git = $git;
@@ -98,7 +98,7 @@ final class Publish implements Command
     private function commit(
         Repository $repository,
         Adapter $files,
-        Directory $website
+        Directory $website,
     ): void {
         $files
             ->all()

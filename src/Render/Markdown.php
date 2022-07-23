@@ -26,7 +26,7 @@ final class Markdown implements Render
     public function __construct(
         RewriteUrl $rewrite,
         Engine $templating,
-        bool $preview
+        bool $preview,
     ) {
         $this->rewrite = $rewrite;
         $this->templating = $templating;
@@ -41,7 +41,7 @@ final class Markdown implements Render
     private function map(
         Config $config,
         Directory $directory,
-        Path $parent = null
+        Path $parent = null,
     ): Directory {
         return $directory->reduce(
             new Directory\Directory($directory->name()),

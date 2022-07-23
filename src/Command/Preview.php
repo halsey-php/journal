@@ -28,7 +28,7 @@ final class Preview implements Command
     public function __construct(
         OperatingSystem $os,
         Generate $generate,
-        Load $load
+        Load $load,
     ) {
         $this->os = $os;
         $this->generate = $generate;
