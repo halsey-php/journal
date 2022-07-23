@@ -10,9 +10,7 @@ use Halsey\Journal\{
 };
 use Innmind\CLI\{
     Command,
-    Command\Arguments,
-    Command\Options,
-    Environment,
+    Console,
 };
 use Innmind\OperatingSystem\OperatingSystem;
 use Innmind\Filesystem\{
@@ -26,7 +24,6 @@ use Innmind\Git\{
     Repository,
     Revision\Branch,
     Message,
-    Exception\CommandFailed,
 };
 use Innmind\Url\Path;
 
@@ -49,28 +46,39 @@ final class Publish implements Command
         $this->load = $load;
     }
 
-    public function __invoke(Environment $env, Arguments $arguments, Options $options): void
+    public function __invoke(Console $console): Console
     {
-        $config = ($this->load)($env->workingDirectory());
+        $config = ($this->load)($console->workingDirectory());
 
         $tmp = $this->os->status()->tmp()->resolve(
             Path::of("halsey-joural-{$this->os->process()->id()->toString()}/"),
         );
         $website = ($this->generate)($config, $tmp);
-        $repository = $this->git->repository($env->workingDirectory());
-        $head = $repository->head();
+        $repository = $this->git->repository($console->workingDirectory())->match(
+            static fn($repository) => $repository,
+            static fn() => throw new \RuntimeException,
+        );
+        $head = $repository->head()->match(
+            static fn($head) => $head,
+            static fn() => throw new \RuntimeException,
+        );
 
         $this->checkout($repository);
         $this->commit(
             $repository,
-            $this->os->filesystem()->mount($env->workingDirectory()),
+            $this->os->filesystem()->mount($console->workingDirectory()),
             $website,
         );
         $this->push($repository);
         $repository->checkout()->revision($head);
+
+        return $console;
     }
 
-    public function toString(): string
+    /**
+     * @psalm-pure
+     */
+    public function usage(): string
     {
         return 'publish';
     }
@@ -85,14 +93,14 @@ final class Publish implements Command
         if ($branches->empty()) {
             $repository
                 ->branches()
-                ->newOrphan(new Branch('gh-pages'));
+                ->newOrphan(Branch::of('gh-pages'));
 
             return;
         }
 
         $repository
             ->checkout()
-            ->revision(new Branch('gh-pages'));
+            ->revision(Branch::of('gh-pages'));
     }
 
     private function commit(
@@ -100,21 +108,20 @@ final class Publish implements Command
         Adapter $files,
         Directory $website,
     ): void {
-        $files
+        $_ = $files
             ->all()
             ->filter(static fn(File $file) => !$file->name()->equals(new Name('.git')))
             ->filter(static fn(File $file) => !$file->name()->equals(new Name('vendor')))
             ->filter(static fn(File $file) => !$file->name()->equals(new Name('.gitignore')))
             ->foreach(static fn(File $file) => $files->remove($file->name()));
 
-        $website->foreach(static fn(File $file) => $files->add($file));
+        $_ = $website->foreach(static fn(File $file) => $files->add($file));
         $repository->add(Path::of('.'));
 
-        try {
-            $repository->commit(new Message('Publish new documentation'));
-        } catch (CommandFailed $e) {
-            // nothing to do here, this happens when there is nothing to commit
-        }
+        $_ = $repository->commit(Message::of('Publish new documentation'))->match(
+            static fn() => null,
+            static fn() => null, // nothing to do if it failed, this happens when there is nothing to commit
+        );
     }
 
     private function push(Repository $repository): void

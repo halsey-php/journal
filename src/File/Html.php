@@ -3,11 +3,10 @@ declare(strict_types = 1);
 
 namespace Halsey\Journal\File;
 
-use Halsey\Journal\{
-    RewriteUrl,
-};
+use Halsey\Journal\RewriteUrl;
 use Innmind\Filesystem\{
     File,
+    File\Content,
     Name,
 };
 use Innmind\Url\Url;
@@ -20,13 +19,15 @@ use Innmind\Xml\{
 };
 use Innmind\Html\Element\A;
 use Innmind\MediaType\MediaType;
-use Innmind\Stream\Readable;
 use Innmind\Immutable\{
     Set,
     Str,
+    Sequence,
 };
-use function Innmind\Immutable\unwrap;
 
+/**
+ * @psalm-immutable
+ */
 final class Html implements File
 {
     private RewriteUrl $rewrite;
@@ -48,15 +49,18 @@ final class Html implements File
         return $this->markdown->name();
     }
 
-    public function content(): Readable
+    public function content(): Content
     {
         $html = $this->markdown->content();
         // if new maps needs to be added maybe it would be a good thing to
         // extract them behind a interface
-        $html = $this->mapUrls(($this->read)($html));
+        $html = $this->mapUrls(($this->read)($html)->match(
+            static fn($node) => $node,
+            static fn() => throw new \RuntimeException,
+        ));
         $html = $this->mapHeaders($html);
 
-        return Readable\Stream::ofContent($html->toString());
+        return Content\Lines::ofContent($html->toString());
     }
 
     public function mediaType(): MediaType
@@ -67,56 +71,41 @@ final class Html implements File
     private function mapUrls(Node $node): Node
     {
         if ($node instanceof A) {
+            /** @psalm-suppress ImpureMethodCall */
             $href = ($this->rewrite)($node->href());
 
-            return new A(
+            return A::of(
                 $href,
-                $node
-                    ->attributes()
-                    ->put('href', new Attribute('href', $href->toString()))
-                    ->values()
-                    ->toSetOf(Attribute::class),
-                ...unwrap($node->children()),
+                Set::of(...$node->attributes()->values()->toList()),
+                $node->children(),
             );
         }
 
-        $children = unwrap($node->children());
-
-        foreach ($children as $position => $child) {
-            $node = $node->replaceChild($position, $this->mapUrls($child));
-        }
-
-        return $node;
+        return $node->mapChild($this->mapUrls(...));
     }
 
     private function mapHeaders(Node $node): Node
     {
         if ($node instanceof Element && Str::of($node->name())->matches('~^h\d$~')) {
-            $anchor = $this->slugify((new Text)($node));
+            $anchor = $this->slugify(Text::of()($node));
 
+            /** @psalm-suppress InvalidArgument */
             return $node
-                ->addAttribute(new Attribute(
+                ->addAttribute(Attribute::of(
                     'id',
                     $anchor,
                 ))
-                ->prependChild(new A(
+                ->prependChild(A::of(
                     Url::of("#$anchor"),
                     Set::of(
-                        Attribute::class,
-                        new Attribute('href', "#$anchor"),
-                        new Attribute('class', 'anchor'),
+                        Attribute::of('href', "#$anchor"),
+                        Attribute::of('class', 'anchor'),
                     ),
-                    new Node\Text('#'),
+                    Sequence::of(Node\Text::of('#')),
                 ));
         }
 
-        $children = unwrap($node->children());
-
-        foreach ($children as $position => $child) {
-            $node = $node->replaceChild($position, $this->mapHeaders($child));
-        }
-
-        return $node;
+        return $node->mapChild($this->mapHeaders(...));
     }
 
     private function slugify(string $header): string

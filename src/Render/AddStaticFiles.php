@@ -31,7 +31,7 @@ final class AddStaticFiles implements Render
             Path::of("templates/{$config->template()->toString()}/static/"),
         );
 
-        return $documentation->add(new Directory\Directory(
+        return $documentation->add(Directory\Directory::of(
             new Name('static'),
             $this->os->filesystem()->mount($static)->all(),
         ));

@@ -25,8 +25,8 @@ final class Generate
     public function __invoke(Config $config, Path $generateAt): Directory
     {
         $tmp = $this->os->filesystem()->mount($generateAt);
-        $tmp->all()->foreach(static fn($file) => $tmp->remove($file->name()));
-        $documentation = new Directory\Directory(
+        $_ = $tmp->all()->foreach(static fn($file) => $tmp->remove($file->name()));
+        $documentation = Directory\Directory::of(
             new Name('root'),
             $this->os->filesystem()->mount($config->documentation())->all(),
         );
@@ -37,7 +37,7 @@ final class Generate
             $tmp->add($file);
         });
 
-        return new Directory\Directory(
+        return Directory\Directory::of(
             new Name('root'),
             $tmp->all(),
         );

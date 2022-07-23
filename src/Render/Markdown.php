@@ -44,7 +44,7 @@ final class Markdown implements Render
         Path $parent = null,
     ): Directory {
         return $directory->reduce(
-            new Directory\Directory($directory->name()),
+            Directory\Directory::of($directory->name()),
             function(Directory $directory, File $file) use ($config, $parent): Directory {
                 if ($file instanceof Directory) {
                     $name = Path::of($file->name()->toString().'/');

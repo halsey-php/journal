@@ -29,22 +29,23 @@ use Innmind\CLI\{
 };
 use Innmind\OperatingSystem\OperatingSystem;
 use Innmind\Git\Git;
-use function Innmind\Templating\bootstrap as templating;
-use function Innmind\Html\bootstrap as html;
+use Innmind\Templating\Factory;
+use Innmind\Html\Reader\Reader;
 use Innmind\Url\Path;
 use Innmind\Immutable\Map;
 
 new class extends Main {
-    protected function main(Environment $env, OperatingSystem $os): void
+    protected function main(Environment $env, OperatingSystem $os): Environment
     {
         $load = new Load;
         $rewriteUrl = new RewriteUrl;
-        $templating = templating(
+        $templating = Factory::build(
             Path::of(__DIR__.'/templates/'),
             null,
-            Map::of('string', 'object')
-                ('rewriteUrl', $rewriteUrl)
-                ('helper', new Templating\Helper($rewriteUrl)),
+            Map::of(
+                ['rewriteUrl', $rewriteUrl],
+                ['helper', new Templating\Helper($rewriteUrl)],
+            ),
         );
         $render = new Render\All(
             new Render\Markdown(
@@ -54,23 +55,34 @@ new class extends Main {
             ),
             new Render\RewriteHtml(
                 $rewriteUrl,
-                html(),
+                Reader::default(),
             ),
             new Render\AddStaticFiles($os, Path::of(__DIR__.'/')),
         );
         $generateWebsite = new Generate($os, $render);
 
-        $run = new Commands(
+        $run = Commands::of(
             new Command\Preview($os, $generateWebsite, $load),
             new Command\Generate($os, $generateWebsite, $load),
             new Command\Publish(
                 $os,
-                new Git($os->control(), $os->clock()),
+                Git::of(
+                    $os->control(),
+                    $os->clock(),
+                    $env
+                        ->variables()
+                        ->get('HOME')
+                        ->map(Path::of(...))
+                        ->match(
+                            static fn($home) => $home,
+                            static fn() => throw new \RuntimeException,
+                        ),
+                ),
                 $generateWebsite,
                 $load,
             ),
         );
 
-        $run($env);
+        return $run($env);
     }
 };

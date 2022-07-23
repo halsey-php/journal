@@ -9,6 +9,7 @@ use Halsey\Journal\{
 };
 use Innmind\Filesystem\{
     File,
+    File\Content,
     Name,
 };
 use Innmind\Templating\Engine;
@@ -17,8 +18,10 @@ use Innmind\Url\{
     Path,
 };
 use Innmind\MediaType\MediaType;
-use Innmind\Stream\Readable;
 
+/**
+ * @psalm-immutable
+ */
 final class Markdown implements File
 {
     private RewriteUrl $rewrite;
@@ -47,13 +50,15 @@ final class Markdown implements File
 
     public function name(): Name
     {
+        /** @psalm-suppress ImpureMethodCall */
         return new Name(
             ($this->rewrite)(Url::of($this->markdown->name()->toString()))->toString(),
         );
     }
 
-    public function content(): Readable
+    public function content(): Content
     {
+        /** @psalm-suppress ImpureMethodCall */
         $parameters = ($this->config->forTemplating($this->preview))
             (
                 'documentation',
@@ -63,6 +68,7 @@ final class Markdown implements File
             )
             ('currentFile', $this->path);
 
+        /** @psalm-suppress ImpureMethodCall */
         return ($this->render)(
             $this->config->template()->entrypoint(),
             $parameters,

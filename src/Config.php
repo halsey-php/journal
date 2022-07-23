@@ -102,7 +102,7 @@ final class Config
         }
 
         /** @var Map<string, mixed> */
-        $parameters = Map::of('string', 'mixed');
+        $parameters = Map::of();
 
         return ($parameters)
             ('organization', $this->organization)

@@ -10,14 +10,15 @@ use Halsey\Journal\{
 };
 use Innmind\CLI\{
     Command,
-    Command\Arguments,
-    Command\Options,
-    Environment,
+    Console,
 };
 use Innmind\OperatingSystem\OperatingSystem;
 use Innmind\Server\Control\Server;
 use Innmind\Url\Path;
-use Innmind\Immutable\Str;
+use Innmind\Immutable\{
+    Str,
+    Either,
+};
 
 final class Preview implements Command
 {
@@ -35,17 +36,14 @@ final class Preview implements Command
         $this->load = $load;
     }
 
-    public function __invoke(Environment $env, Arguments $arguments, Options $options): void
+    public function __invoke(Console $console): Console
     {
-        $config = ($this->load)($env->workingDirectory());
+        $config = ($this->load)($console->workingDirectory());
 
         $watch = $this->os->filesystem()->watch($config->documentation());
         $tmp = $this->os->status()->tmp()->resolve(
             Path::of("halsey-joural-{$this->os->process()->id()->toString()}/"),
         );
-        $output = static function(string $out) use ($env): void {
-            $env->output()->write(Str::of($out));
-        };
         ($this->generate)($config, $tmp);
         $this->os->control()->processes()->execute(
             Server\Command::background('php')
@@ -53,18 +51,29 @@ final class Preview implements Command
                 ->withWorkingDirectory($tmp),
         );
         $this->openBrowser();
-        $output("Webserver available at: http://localhost:2492\n");
+        $console = $console->output(Str::of("Webserver available at: http://localhost:2492\n"));
 
-        $watch(function() use ($output, $tmp, $env): void {
-            $output('folder changed, regenerating...');
-            $config = ($this->load)($env->workingDirectory());
-            ($this->generate)($config, $tmp);
-            $output(" ok\n");
-            $this->openBrowser();
-        });
+        return $watch(
+            $console,
+            function(Console $console) use ($tmp) {
+                $console = $console->output(Str::of('folder changed, regenerating...'));
+                $config = ($this->load)($console->workingDirectory());
+                ($this->generate)($config, $tmp);
+                $console = $console->output(Str::of(" ok\n"));
+                $this->openBrowser();
+
+                return Either::right($console);
+            },
+        )->match(
+            static fn($console) => $console,
+            static fn() => throw new \RuntimeException,
+        );
     }
 
-    public function toString(): string
+    /**
+     * @psalm-pure
+     */
+    public function usage(): string
     {
         return 'preview';
     }
