@@ -78,9 +78,18 @@ final class Preview implements Command
 
     private function openBrowser(): void
     {
-        $this->os->control()->processes()->execute(
-            Server\Command::foreground('open')
-                ->withArgument('http://localhost:2492'),
-        )->wait();
+        $_ = $this
+            ->os
+            ->control()
+            ->processes()
+            ->execute(
+                Server\Command::foreground('open')
+                    ->withArgument('http://localhost:2492'),
+            )
+            ->wait()
+            ->match(
+                static fn() => null,
+                static fn() => null, // it fails when not on macOS
+            );
     }
 }
