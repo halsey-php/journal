@@ -10,6 +10,9 @@ use Innmind\Url\{
 };
 use Innmind\Immutable\Str;
 
+/**
+ * @psalm-immutable
+ */
 final class RewriteUrl
 {
     public function __invoke(Url $url): Url

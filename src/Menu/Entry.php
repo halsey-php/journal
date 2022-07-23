@@ -14,6 +14,9 @@ use Innmind\Url\{
     Fragment,
 };
 
+/**
+ * @psalm-immutable
+ */
 final class Entry
 {
     private string $name;
@@ -40,6 +43,7 @@ final class Entry
 
     /**
      * @no-named-arguments
+     * @psalm-pure
      */
     public static function externalLink(
         string $name,
@@ -51,6 +55,7 @@ final class Entry
 
     /**
      * @no-named-arguments
+     * @psalm-pure
      */
     public static function section(string $name, self $first, self ...$entries): self
     {
@@ -59,6 +64,7 @@ final class Entry
 
     /**
      * @no-named-arguments
+     * @psalm-pure
      */
     public static function markdown(
         string $name,
