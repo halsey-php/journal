@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html>
-<head>
+<html><head>
     <title>halsey/journal</title>
     <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/main.css"/>
     <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/default.css"/>
@@ -49,11 +49,6 @@
                                         Via GitHub Action
                                     </a>
                                 </li>
-                                                            <li class="sub-item ">
-                                    <a href="https://halsey-php.github.io/journal/publication/manually.html">
-                                        Manually
-                                    </a>
-                                </li>
                                                     </ul>
                     </details>
                             </li>
@@ -75,7 +70,7 @@
 <li>create a <code>.journal</code> file at the root of your repository</li>
 </ul>
 <p>The <code>documentation/</code> folder will contain all your markdown files the same way you would normally write them (no special format required). The folder can also contain any extra file you may want such as images, videos, audio or anything else and will be also published to the website so you can safely reference them in your markdown files.</p>
-<p>The <code>.journal</code> file is a PHP file that will contain the <a href="configuration.html">configuration</a> of the website. It must look like this:</p>
+<p>The <code>.journal</code> file is a PHP file that will contain the <a href="configuration.md">configuration</a> of the website. It must look like this:</p>
 <pre><code class="language-php">use Halsey\Journal\Config;
 
 return static function(Config $config): Config
@@ -86,4 +81,5 @@ return static function(Config $config): Config
         <a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
     </footer>
 </body>
+
 </html>

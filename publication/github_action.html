@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html>
-<head>
+<html><head>
     <title>halsey/journal</title>
     <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/main.css"/>
     <link rel="stylesheet" href="https://halsey-php.github.io/journal/static/styles/default.css"/>
@@ -49,11 +49,6 @@
                                         Via GitHub Action
                                     </a>
                                 </li>
-                                                            <li class="sub-item ">
-                                    <a href="https://halsey-php.github.io/journal/publication/manually.html">
-                                        Manually
-                                    </a>
-                                </li>
                                                     </ul>
                     </details>
                             </li>
@@ -78,7 +73,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4' # change the version to the one supported by your project
+          php-version: '8.1' # change the version to the one supported by your project
       - name: Install halsey/journal
         run: composer global require halsey/journal
       - name: Generate
@@ -93,4 +88,5 @@ jobs:
         <a href="https://github.com/halsey-php/journal/" target="_blank">GitHub</a>
     </footer>
 </body>
+
 </html>
