@@ -31,7 +31,7 @@ final class Config
         $this->project = $project;
         /** @var RelativePath */
         $this->documentation = Path::of('documentation/');
-        $this->template = Template::raw();
+        $this->template = Template::raw;
     }
 
     public function package(
