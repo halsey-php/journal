@@ -29,7 +29,6 @@ final class Markdown implements File
     private Config $config;
     private File $markdown;
     private Path $path;
-    private bool $preview;
 
     public function __construct(
         RewriteUrl $rewrite,
@@ -37,7 +36,6 @@ final class Markdown implements File
         Config $config,
         File $markdown,
         ?Path $parent,
-        bool $preview,
     ) {
         $name = Path::of($markdown->name()->toString());
         $this->rewrite = $rewrite;
@@ -45,7 +43,6 @@ final class Markdown implements File
         $this->config = $config;
         $this->markdown = $markdown;
         $this->path = $parent ? $parent->resolve($name) : $name;
-        $this->preview = $preview;
     }
 
     public function name(): Name
@@ -59,7 +56,7 @@ final class Markdown implements File
     public function content(): Content
     {
         /** @psalm-suppress ImpureMethodCall */
-        $parameters = ($this->config->forTemplating($this->preview))
+        $parameters = ($this->config->forTemplating())
             (
                 'documentation',
                 (string) (new \Parsedown)->text(

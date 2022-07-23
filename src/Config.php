@@ -25,6 +25,7 @@ final class Config
     private string $package = '';
     /** @var list<Entry> */
     private array $menu = [];
+    private bool $preview = false;
 
     private function __construct(Path $project)
     {
@@ -84,6 +85,17 @@ final class Config
     /**
      * @internal
      */
+    public function preview(): self
+    {
+        $self = clone $this;
+        $self->preview = true;
+
+        return $self;
+    }
+
+    /**
+     * @internal
+     */
     public function documentation(): Path
     {
         return $this->project->resolve($this->documentation);
@@ -102,11 +114,11 @@ final class Config
      *
      * @return Map<string, mixed>
      */
-    public function forTemplating(bool $preview): Map
+    public function forTemplating(): Map
     {
         $baseUrl = "https://{$this->organization}.github.io/{$this->repository}/";
 
-        if ($preview) {
+        if ($this->preview) {
             $baseUrl = 'http://localhost:2492/';
         }
 

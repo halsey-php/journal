@@ -51,7 +51,6 @@ new class extends Main {
             new Render\Markdown(
                 $rewriteUrl,
                 $templating,
-                $env->arguments()->contains('preview'),
             ),
             new Render\RewriteHtml(
                 $rewriteUrl,

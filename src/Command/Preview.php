@@ -38,7 +38,7 @@ final class Preview implements Command
 
     public function __invoke(Console $console): Console
     {
-        $config = ($this->load)($console->workingDirectory());
+        $config = ($this->load)($console->workingDirectory())->preview();
 
         $watch = $this->os->filesystem()->watch($config->documentation());
         $tmp = $this->os->status()->tmp()->resolve(
