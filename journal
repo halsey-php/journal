@@ -37,7 +37,7 @@ use Innmind\Immutable\Map;
 new class extends Main {
     protected function main(Environment $env, OperatingSystem $os): Environment
     {
-        $load = new Load;
+        $load = new Load($os->filesystem());
         $rewriteUrl = new RewriteUrl;
         $templating = Factory::build(
             Path::of(__DIR__.'/templates/'),
