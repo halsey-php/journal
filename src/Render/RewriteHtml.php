@@ -23,7 +23,7 @@ final class RewriteHtml implements Render
 
     public function __construct(
         RewriteUrl $rewrite,
-        Reader $reader
+        Reader $reader,
     ) {
         $this->rewrite = $rewrite;
         $this->reader = $reader;
@@ -37,7 +37,7 @@ final class RewriteHtml implements Render
     private function map(Config $config, Directory $directory): Directory
     {
         return $directory->reduce(
-            new Directory\Directory($directory->name()),
+            Directory\Directory::of($directory->name()),
             function(Directory $directory, File $file) use ($config): Directory {
                 if ($file instanceof Directory) {
                     return $directory->add($this->map($config, $file));

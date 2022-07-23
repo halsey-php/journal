@@ -10,40 +10,39 @@ use Halsey\Journal\{
 };
 use Innmind\CLI\{
     Command,
-    Command\Arguments,
-    Command\Options,
-    Environment,
+    Console,
 };
-use Innmind\OperatingSystem\OperatingSystem;
 use Innmind\Url\Path;
 
 final class Generate implements Command
 {
-    private OperatingSystem $os;
     private GenerateWebsite $generate;
     private Load $load;
 
     public function __construct(
-        OperatingSystem $os,
         GenerateWebsite $generate,
-        Load $load
+        Load $load,
     ) {
-        $this->os = $os;
         $this->generate = $generate;
         $this->load = $load;
     }
 
-    public function __invoke(Environment $env, Arguments $arguments, Options $options): void
+    public function __invoke(Console $console): Console
     {
-        $config = ($this->load)($env->workingDirectory());
+        $config = ($this->load)($console->workingDirectory());
 
         ($this->generate)(
             $config,
-            $env->workingDirectory()->resolve(Path::of('.tmp_journal/')),
+            $console->workingDirectory()->resolve(Path::of('.tmp_journal/')),
         );
+
+        return $console;
     }
 
-    public function toString(): string
+    /**
+     * @psalm-pure
+     */
+    public function usage(): string
     {
         return 'generate';
     }

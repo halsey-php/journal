@@ -14,6 +14,9 @@ use Innmind\Url\{
     Fragment,
 };
 
+/**
+ * @psalm-immutable
+ */
 final class Entry
 {
     private string $name;
@@ -23,11 +26,14 @@ final class Entry
     private array $entries;
     private bool $alwaysOpen = false;
 
+    /**
+     * @no-named-arguments
+     */
     private function __construct(
         string $name,
         Url $url,
         bool $externalLink,
-        self ...$entries
+        self ...$entries,
     ) {
         $this->name = $name;
         $this->url = $url;
@@ -35,23 +41,35 @@ final class Entry
         $this->entries = $entries;
     }
 
+    /**
+     * @no-named-arguments
+     * @psalm-pure
+     */
     public static function externalLink(
         string $name,
         Url $url,
-        self ...$entries
+        self ...$entries,
     ): self {
         return new self($name, $url, true, ...$entries);
     }
 
+    /**
+     * @no-named-arguments
+     * @psalm-pure
+     */
     public static function section(string $name, self $first, self ...$entries): self
     {
         return new self($name, Url::of('#'), false, $first, ...$entries);
     }
 
+    /**
+     * @no-named-arguments
+     * @psalm-pure
+     */
     public static function markdown(
         string $name,
         RelativePath $markdown,
-        self ...$entries
+        self ...$entries,
     ): self {
         return new self(
             $name,

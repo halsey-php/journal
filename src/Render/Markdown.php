@@ -21,16 +21,13 @@ final class Markdown implements Render
 {
     private RewriteUrl $rewrite;
     private Engine $templating;
-    private bool $preview;
 
     public function __construct(
         RewriteUrl $rewrite,
         Engine $templating,
-        bool $preview
     ) {
         $this->rewrite = $rewrite;
         $this->templating = $templating;
-        $this->preview = $preview;
     }
 
     public function __invoke(Config $config, Directory $documentation): Directory
@@ -41,10 +38,10 @@ final class Markdown implements Render
     private function map(
         Config $config,
         Directory $directory,
-        Path $parent = null
+        Path $parent = null,
     ): Directory {
         return $directory->reduce(
-            new Directory\Directory($directory->name()),
+            Directory\Directory::of($directory->name()),
             function(Directory $directory, File $file) use ($config, $parent): Directory {
                 if ($file instanceof Directory) {
                     $name = Path::of($file->name()->toString().'/');
@@ -63,7 +60,6 @@ final class Markdown implements Render
                         $config,
                         $file,
                         $parent,
-                        $this->preview,
                     ));
                 }
 

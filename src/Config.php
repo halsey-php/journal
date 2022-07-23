@@ -11,6 +11,9 @@ use Innmind\Url\{
 };
 use Innmind\Immutable\Map;
 
+/**
+ * @psalm-immutable
+ */
 final class Config
 {
     private Path $project;
@@ -22,23 +25,30 @@ final class Config
     private string $package = '';
     /** @var list<Entry> */
     private array $menu = [];
+    private bool $preview = false;
 
-    /**
-     * @internal
-     */
-    public function __construct(Path $project)
+    private function __construct(Path $project)
     {
         $this->project = $project;
         /** @var RelativePath */
         $this->documentation = Path::of('documentation/');
-        $this->template = Template::raw();
+        $this->template = Template::raw;
+    }
+
+    /**
+     * @internal
+     * @psalm-pure
+     */
+    public static function of(Path $project): self
+    {
+        return new self($project);
     }
 
     public function package(
         string $vendor,
         string $package,
         string $organization = null,
-        string $repository = null
+        string $repository = null,
     ): self {
         $self = clone $this;
         $self->organization = $organization ?? $vendor;
@@ -49,6 +59,9 @@ final class Config
         return $self;
     }
 
+    /**
+     * @no-named-arguments
+     */
     public function menu(Entry ...$menu): self
     {
         $self = clone $this;
@@ -65,6 +78,17 @@ final class Config
 
         $self = clone $this;
         $self->documentation = $folder;
+
+        return $self;
+    }
+
+    /**
+     * @internal
+     */
+    public function preview(): self
+    {
+        $self = clone $this;
+        $self->preview = true;
 
         return $self;
     }
@@ -90,16 +114,16 @@ final class Config
      *
      * @return Map<string, mixed>
      */
-    public function forTemplating(bool $preview): Map
+    public function forTemplating(): Map
     {
         $baseUrl = "https://{$this->organization}.github.io/{$this->repository}/";
 
-        if ($preview) {
+        if ($this->preview) {
             $baseUrl = 'http://localhost:2492/';
         }
 
         /** @var Map<string, mixed> */
-        $parameters = Map::of('string', 'mixed');
+        $parameters = Map::of();
 
         return ($parameters)
             ('organization', $this->organization)

@@ -5,29 +5,24 @@ namespace Halsey\Journal;
 
 use Innmind\Templating\Name;
 
-final class Template
+/**
+ * @psalm-immutable
+ */
+enum Template
 {
-    private string $name;
-    private Name $entrypoint;
-
-    private function __construct(string $name, Name $entrypoint)
-    {
-        $this->name = $name;
-        $this->entrypoint = $entrypoint;
-    }
-
-    public static function raw(): self
-    {
-        return new self('raw', new Name('raw/template/index.html.twig'));
-    }
+    case raw;
 
     public function entrypoint(): Name
     {
-        return $this->entrypoint;
+        return match ($this) {
+            self::raw => new Name('raw/template/index.html.twig'),
+        };
     }
 
     public function toString(): string
     {
-        return $this->name;
+        return match ($this) {
+            self::raw => 'raw',
+        };
     }
 }

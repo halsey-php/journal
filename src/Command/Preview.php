@@ -10,14 +10,15 @@ use Halsey\Journal\{
 };
 use Innmind\CLI\{
     Command,
-    Command\Arguments,
-    Command\Options,
-    Environment,
+    Console,
 };
 use Innmind\OperatingSystem\OperatingSystem;
 use Innmind\Server\Control\Server;
 use Innmind\Url\Path;
-use Innmind\Immutable\Str;
+use Innmind\Immutable\{
+    Str,
+    Either,
+};
 
 final class Preview implements Command
 {
@@ -28,24 +29,21 @@ final class Preview implements Command
     public function __construct(
         OperatingSystem $os,
         Generate $generate,
-        Load $load
+        Load $load,
     ) {
         $this->os = $os;
         $this->generate = $generate;
         $this->load = $load;
     }
 
-    public function __invoke(Environment $env, Arguments $arguments, Options $options): void
+    public function __invoke(Console $console): Console
     {
-        $config = ($this->load)($env->workingDirectory());
+        $config = ($this->load)($console->workingDirectory())->preview();
 
         $watch = $this->os->filesystem()->watch($config->documentation());
         $tmp = $this->os->status()->tmp()->resolve(
             Path::of("halsey-joural-{$this->os->process()->id()->toString()}/"),
         );
-        $output = static function(string $out) use ($env): void {
-            $env->output()->write(Str::of($out));
-        };
         ($this->generate)($config, $tmp);
         $this->os->control()->processes()->execute(
             Server\Command::background('php')
@@ -53,27 +51,45 @@ final class Preview implements Command
                 ->withWorkingDirectory($tmp),
         );
         $this->openBrowser();
-        $output("Webserver available at: http://localhost:2492\n");
+        $console = $console->output(Str::of("Webserver available at: http://localhost:2492\n"));
 
-        $watch(function() use ($output, $tmp, $env): void {
-            $output('folder changed, regenerating...');
-            $config = ($this->load)($env->workingDirectory());
-            ($this->generate)($config, $tmp);
-            $output(" ok\n");
-            $this->openBrowser();
-        });
+        return $watch(
+            $console,
+            function(Console $console) use ($tmp) {
+                $console = $console->output(Str::of('folder changed, regenerating...'));
+                $config = ($this->load)($console->workingDirectory());
+                ($this->generate)($config, $tmp);
+
+                return Either::right($console->output(Str::of(" ok\n")));
+            },
+        )->match(
+            static fn($console) => $console,
+            static fn() => throw new \RuntimeException,
+        );
     }
 
-    public function toString(): string
+    /**
+     * @psalm-pure
+     */
+    public function usage(): string
     {
         return 'preview';
     }
 
     private function openBrowser(): void
     {
-        $this->os->control()->processes()->execute(
-            Server\Command::foreground('open')
-                ->withArgument('http://localhost:2492'),
-        )->wait();
+        $_ = $this
+            ->os
+            ->control()
+            ->processes()
+            ->execute(
+                Server\Command::foreground('open')
+                    ->withArgument('http://localhost:2492'),
+            )
+            ->wait()
+            ->match(
+                static fn() => null,
+                static fn() => null, // it fails when not on macOS
+            );
     }
 }
